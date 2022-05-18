@@ -1,11 +1,15 @@
 const initialState = {
-  nesto: 'bla bla'
+  nesto: 'bla bla',
+  route: 'HOME'
 };
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'NESTO_KAO':
-      return state;
+    case 'ROUTE_SET':
+      return {
+        ...state,
+        route: action.payload
+      };
   
     default:
       return state;
