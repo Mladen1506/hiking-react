@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -9,8 +10,54 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 const FormTour = () => {
+    const theme = createTheme();
 
-  const theme = createTheme();
+    const preset = {
+      name: '',
+      description: '',
+      date: '06/14/2022',
+      difficulty: 'MEDIUM',
+      trail_length: 14,
+      max_participants: 99
+    };
+
+    const [formState, setFormState] = useState(preset);
+
+  const handleChange = (e) => {
+    const target = e.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    setFormState({
+      ...formState,
+      [name]: value
+    });
+  };
+
+  const validator = (formState) => {
+    let test = true;
+
+    if(formState.name === ''){
+      test = false;
+    }
+    if(formState.description === ''){
+      test = false;
+    }
+    if (formState.trail_length < 1){
+      test = false;
+    }
+    return test;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(validator(formState)){
+      console.log('submit...');
+      console.log(formState);
+    } else{
+      window.alert('Form validation error')
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -27,11 +74,13 @@ const FormTour = () => {
           <Typography component="h1" variant="h3">
             Create Tour
           </Typography>
-          <Box component="form" onSubmit={() => { }} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               id="tourname"
               label="Tour Name"
-              name="tourname"
+              name="name"
+              value={formState.name}
+              onChange={handleChange}
               margin="normal"
               required
               fullWidth
@@ -41,6 +90,8 @@ const FormTour = () => {
               id="description"
               label="Description"
               name="description"
+              value={formState.description}
+              onChange={handleChange}
               margin="normal"
               multiline
               rows={4}
@@ -52,6 +103,8 @@ const FormTour = () => {
               id="date"
               label="Date"
               name="date"
+              value={formState.date}
+              onChange={handleChange}
               margin="normal"
               required
               fullWidth
@@ -62,6 +115,8 @@ const FormTour = () => {
               row
               defaultValue="EASY"
               name="difficulty"
+              value={formState.difficulty}
+              onChange={handleChange}
             >
               <FormControlLabel value="EASY" control={<Radio />} label="Easy" />
               <FormControlLabel value="MEDIUM" control={<Radio />} label="Medium" />
@@ -71,6 +126,8 @@ const FormTour = () => {
               id="trail_length"
               label="Trail Length"
               name="trail_length"
+              value={formState.trail_length}
+              onChange={handleChange}
               margin="normal"
               type='number'
               required
@@ -81,6 +138,8 @@ const FormTour = () => {
               id="max_participants"
               label="Max Number Of Participants"
               name="max_participants"
+              value={formState.max_participants}
+              onChange={handleChange}
               margin="normal"
               type='number'
               required
