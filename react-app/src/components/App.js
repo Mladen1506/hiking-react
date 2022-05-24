@@ -47,7 +47,6 @@ const App = () => {
         <div onClick={handleClickHome}>Home</div>
         <div onClick={handleClickRegister}>Register</div>
         <div onClick={handleClickLogin}>Login</div>
-        <div onClick={handleClickLogin}>Login</div>
         <div onClick={handleClickAddTour}>Add Tour</div>
         <div onClick={handleClickLogout}>Logout</div>
       </header>

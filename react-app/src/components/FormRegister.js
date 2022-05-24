@@ -2,6 +2,7 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
+import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -12,6 +13,55 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const FormRegister = () => {
 
   const theme = createTheme();
+
+  const preset = {
+    username: '',
+    password: '',
+    password2: ''
+  };
+
+  const [formState, setFormState] = useState(preset);
+
+  const handleChange = (e) => {
+    const target = e.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    setFormState({
+      ...formState,
+      [name]: value
+    });
+  };
+
+  const validator = () => {
+    let test = true;
+
+    if(formState.username === ''){
+      test = false;
+    }
+    if(formState.password === ''){
+      test = false;
+    }
+    if(formState.password2 === ''){
+      test = false;
+    }
+    if (formState.password !== formState.password2){
+      test = false;
+    }
+
+    return test;
+  };
+
+  const handleClickSubmit = (e) => {
+    e.preventDefault();
+    if(validator(formState)){
+      console.log('click submit...');
+      console.log(formState);
+    } else{
+      window.alert('Error')
+    }
+  };
+
 
   return(
     <ThemeProvider theme={theme}>
@@ -34,8 +84,10 @@ const FormRegister = () => {
           <Box component="form" onSubmit={() => {}} noValidate sx={{ mt: 1 }}>
             <TextField
               id="email"
-              label="Email Address"
-              name="email"
+              name="username"
+              value={formState.username}
+              onChange={handleChange}
+              label="Username"
               margin="normal"
               required
               fullWidth
@@ -45,6 +97,8 @@ const FormRegister = () => {
             <TextField
               name="password"
               label="Password"
+              value={formState.password}
+              onChange={handleChange}
               type="password"
               id="password"
               margin="normal"
@@ -54,17 +108,20 @@ const FormRegister = () => {
             <TextField
               name="password2"
               label="Confirm Password"
-              type="password2"
+              value={formState.password2}
+              onChange={handleChange}
+              type="password"
               margin="normal"
               id="password2"
               required
               fullWidth
             />
             <Button
-              type="submit"
+              type="button"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleClickSubmit}
             >
               Register
             </Button>
