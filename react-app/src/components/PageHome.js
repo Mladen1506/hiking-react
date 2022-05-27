@@ -2,6 +2,7 @@ import { CssBaseline, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, Text
 import { Box, Container } from "@mui/system";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import TourItem from "./TourItem";
 
 const PageHome = (props) => {
 
@@ -32,13 +33,21 @@ const PageHome = (props) => {
 
     let test = true;
 
+    if (formState.search !== '') {
+      if (tour.name.toUpperCase().includes(formState.search.toUpperCase()) || tour.description.includes(formState.search.toUpperCase())) {
+
+      } else {
+        test = false;
+      }
+    }
+
     if (tour.difficulty === formState.difficulty || formState.difficulty === 'ALL') {
-      
+
     } else {
       test = false;
     }
     if (tour.trail_length >= formState.trail_length_min && tour.trail_length <= formState.trail_length_max) {
-     
+
     } else {
       test = false;
     }
@@ -48,14 +57,7 @@ const PageHome = (props) => {
 
   let jsx = filteredTours.map((tour, index) => {
     return (
-      <div key={tour._id}>
-        <h3>{tour.name}</h3>
-        <div>{tour.description}</div>
-        <div>{tour.date}</div>
-        <div>{tour.difficulty}</div>
-        <div>{tour.trail_length}</div>
-        <div>{tour.max_participantsp}</div>
-      </div>
+      <TourItem key={tour._id} tour={tour} />
     );
   });
 
@@ -74,6 +76,17 @@ const PageHome = (props) => {
             alignItems: 'center',
           }}
         >
+          <TextField
+            id="search"
+            label="Filter By Keywords"
+            name="search"
+            value={formState.search}
+            onChange={handleChange}
+            margin="normal"
+            required
+            fullWidth
+            autoFocus
+          />
           <Grid container>
             <Grid item xs>
               <TextField
@@ -104,7 +117,7 @@ const PageHome = (props) => {
               />
             </Grid>
           </Grid>
-      
+
           <FormLabel id="difficulty">Difficulty</FormLabel>
           <RadioGroup
             row
@@ -120,9 +133,9 @@ const PageHome = (props) => {
           </RadioGroup>
         </Box>
       </Container>
-        {jsx}
-      </>
-      );
+      {jsx}
+    </>
+  );
 };
 
-      export default PageHome;
+export default PageHome;
