@@ -1,21 +1,7 @@
 import { useSelector } from "react-redux";
-
-const calculateAverageRating = (reviews, tour_id) => {
-  let averageRating = 0;
-  let totalRating = 0;
-  let count = 0;
-
-  reviews.forEach((review) => {
-    if(review.tour_id === tour_id){
-      totalRating += review.rating;
-      count++;
-    }
-  });
-  if(count !== 0){
-    averageRating = totalRating / count;
-  }
-  return averageRating;
-};
+import { Typography } from '@mui/material';
+import { Rating } from '@mui/material';
+import { calculateAverageRating } from "../utils/tour-utils";
 
 const TourItem = (props) => {
   const tour = props.tour;
@@ -38,6 +24,12 @@ const TourItem = (props) => {
       <div>{tour.trail_length}</div>
       <div>{tour.max_participantsp}</div>
       <div>Average Rating: {averageRating}</div>
+      <Typography component="legend">Controlled</Typography>
+      <Rating
+        name="average_rating"
+        value={averageRating}
+        readOnly
+      />
     </div>
   )
 };
