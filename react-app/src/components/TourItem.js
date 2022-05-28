@@ -24,7 +24,7 @@ const TourItem = (props) => {
       <div>{tour.trail_length}</div>
       <div>{tour.max_participantsp}</div>
       <div>Average Rating: {averageRating}</div>
-      <Typography component="legend">Controlled</Typography>
+      <Typography component="legend">Average Rating</Typography>
       <Rating
         name="average_rating"
         value={averageRating}

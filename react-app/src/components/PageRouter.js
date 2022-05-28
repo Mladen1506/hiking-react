@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import FormLogin from "./FormLogin";
 import FormRegister from "./FormRegister";
+import FormReview from "./FormReview";
 import FormTour from "./FormTour";
 import PageHome from "./PageHome";
 
@@ -25,6 +26,10 @@ const PageRouter = () => {
   } else if (route === 'ADD_TOUR'){
     jsx = (
       <FormTour />
+    );
+  } else if (route === 'ADD_REVIEW'){
+    jsx = (
+      <FormReview />
     );
   } else {
     jsx = (
