@@ -41,6 +41,13 @@ const App = () => {
     })
   };
 
+  const handleClickMyTours = (e) => {
+    dispatch({
+      type: 'ROUTE_SET',
+      payload: 'MY_TOURS'
+    })
+  };
+
   const handleClickLogout = (e) => {
     dispatch({
       type: 'ROUTE_SET',
@@ -56,6 +63,7 @@ const App = () => {
         <div onClick={handleClickLogin}>Login</div>
         <div onClick={handleClickAddTour}>Add Tour</div>
         <div onClick={handleClickAddReview}>Add Review</div>
+        <div onClick={handleClickMyTours}>My Tours</div>
         <div onClick={handleClickLogout}>Logout</div>
       </header>
       <PageRouter />
