@@ -17,12 +17,12 @@ const TourItem = (props) => {
 
   return (
     <div>
-      <h3>{tour.name}</h3>
-      <div>{tour.description}</div>
-      <div>{tour.date}</div>
-      <div>{tour.difficulty}</div>
-      <div>{tour.trail_length}</div>
-      <div>{tour.max_participantsp}</div>
+      <h3>Tour Name: {tour.name}</h3>
+      <div>About Tour:{tour.description}</div>
+      <div>Tour Date:{tour.date}</div>
+      <div>Difficulty: {tour.difficulty}</div>
+      <div>Trail Length:{tour.trail_length}</div>
+      <div>Maximum Participants:{tour.max_participants}</div>
       <div>Average Rating: {averageRating}</div>
       <Typography component="legend">Average Rating</Typography>
       <Rating
