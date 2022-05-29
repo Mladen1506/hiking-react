@@ -58,15 +58,22 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <div onClick={handleClickHome}>Home</div>
-        <div onClick={handleClickRegister}>Register</div>
-        <div onClick={handleClickLogin}>Login</div>
-        <div onClick={handleClickAddTour}>Add Tour</div>
-        <div onClick={handleClickAddReview}>Add Review</div>
-        <div onClick={handleClickMyTours}>My Tours</div>
-        <div onClick={handleClickLogout}>Logout</div>
+        <p>
+          Hiking Trails
+        </p>
+        <nav>
+          <div onClick={handleClickHome}>Home</div>
+          <div onClick={handleClickRegister}>Register</div>
+          <div onClick={handleClickLogin}>Login</div>
+          <div onClick={handleClickAddTour}>Add Tour</div>
+          <div onClick={handleClickAddReview}>Add Review</div>
+          <div onClick={handleClickMyTours}>My Tours</div>
+          <div onClick={handleClickLogout}>Logout</div>
+        </nav>
       </header>
-      <PageRouter />
+      <div className='page-body'>
+        <PageRouter />
+      </div>
     </div>
   );
 }
