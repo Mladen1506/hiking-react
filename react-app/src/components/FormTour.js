@@ -8,20 +8,37 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getSingleTourById } from '../utils/tour-utils';
 
-const FormTour = () => {
-    const theme = createTheme();
 
-    const preset = {
-      name: '',
-      description: '',
-      date: '06/14/2022',
-      difficulty: 'MEDIUM',
-      trail_length: 14,
-      max_participants: 99
-    };
 
-    const [formState, setFormState] = useState(preset);
+const FormTour = (props) => {
+  const theme = createTheme();
+
+  const routeParams = useSelector((state) => state.routeParams);
+  const tours = useSelector((state) => state.tours);
+
+  const tour_id = routeParams.tour_id;
+
+  const modeEdit = props.modeEdit;
+
+  const preset = {
+    name: '',
+    description: '',
+    date: '06/14/2022',
+    difficulty: 'MEDIUM',
+    trail_length: 14,
+    max_participants: 99
+  };
+
+  const [formState, setFormState] = useState(preset);
+
+  useEffect(() => {
+    const editingTour = getSingleTourById(tour_id, tours);
+    setFormState(editingTour);
+  }, [tour_id, tours])
 
   const handleChange = (e) => {
     const target = e.target;
@@ -37,13 +54,13 @@ const FormTour = () => {
   const validator = (formState) => {
     let test = true;
 
-    if(formState.name === ''){
+    if (formState.name === '') {
       test = false;
     }
-    if(formState.description === ''){
+    if (formState.description === '') {
       test = false;
     }
-    if (formState.trail_length < 1){
+    if (formState.trail_length < 1) {
       test = false;
     }
     return test;
@@ -51,10 +68,15 @@ const FormTour = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(validator(formState)){
+    if (validator(formState)) {
       console.log('submit...');
       console.log(formState);
-    } else{
+      if (modeEdit) {
+
+      } else {
+        
+      }
+    } else {
       window.alert('Form validation error')
     }
   };
@@ -72,7 +94,7 @@ const FormTour = () => {
           }}
         >
           <Typography component="h1" variant="h3">
-            Create Tour
+            {modeEdit ? 'Edit Tour' : 'Create Tour'}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -146,14 +168,26 @@ const FormTour = () => {
               fullWidth
               autoFocus
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Create
-            </Button>
+            {modeEdit ? (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Edit
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Create
+              </Button>
+            )
+            }
           </Box>
         </Box>
       </Container>

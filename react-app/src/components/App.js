@@ -9,7 +9,9 @@ const App = () => {
   const handleClickHome = (e) => {
     dispatch({
       type: 'ROUTE_SET',
-      payload: 'HOME'
+      payload: {
+        route: 'HOME'
+      }
     })
   };
 
