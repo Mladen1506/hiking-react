@@ -1,0 +1,14 @@
+{
+  "name": "express-app",
+  "version": "1.0.0",
+  "description": "backend for hiking app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mladen Makivic",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
