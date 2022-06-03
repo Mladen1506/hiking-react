@@ -17,9 +17,8 @@ import { getSingleTourById } from '../utils/tour-utils';
 const FormTour = (props) => {
   const theme = createTheme();
 
-  const routeParams = useSelector((state) => state.routeParams);
   const tours = useSelector((state) => state.tours);
-
+  const routeParams = useSelector((state) => state.routeParams);
   const tour_id = routeParams.tour_id;
 
   const modeEdit = props.modeEdit;
@@ -37,8 +36,10 @@ const FormTour = (props) => {
 
   useEffect(() => {
     const editingTour = getSingleTourById(tour_id, tours);
-    setFormState(editingTour);
-  }, [tour_id, tours])
+    if (editingTour !== null){
+      setFormState(editingTour);
+    }
+  }, [tour_id, tours]);
 
   const handleChange = (e) => {
     const target = e.target;
