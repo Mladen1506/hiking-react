@@ -1,14 +1,21 @@
 {
   "name": "express-app",
-  "version": "1.0.0",
-  "description": "backend for hiking app",
-  "main": "index.js",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "author": "Mladen Makivic",
-  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.1"
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.5.0",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.6",
+    "morgan": "~1.9.1"
   }
 }
