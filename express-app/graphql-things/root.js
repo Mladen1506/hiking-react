@@ -1,3 +1,6 @@
+const Glupost = require('../models/glupost-model')
+
+
 // GRAPPHQL RESOLVERS
 
 var root = {
@@ -17,7 +20,17 @@ var root = {
     console.log('context.headers');
     console.log(context.headers);
     return 'We just tested arguments for resolver';
-  },
+  }, 
+
+  napraviGlupost: async () => {
+    await Glupost.create(
+      {
+        nesto: 'stagod',
+        nesto2: 'stagod2'
+      }
+    );
+    return 'Kreiranje u mongo Glupost uspjela';
+  }
 };
 
 module.exports = root;
