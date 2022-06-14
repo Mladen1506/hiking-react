@@ -30,6 +30,12 @@ var root = {
       }
     );
     return 'Kreiranje u mongo Glupost uspjela';
+  },
+  authRegister: async (args, context)=> {
+    console.log('authRegister resolver');
+    console.log('args');
+    console.log(args);
+    return 'Vracamo neki odgovor od authRegister'
   }
 };
 
