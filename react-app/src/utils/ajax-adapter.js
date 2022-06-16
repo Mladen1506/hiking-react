@@ -11,7 +11,7 @@ ajax.authRegister = async (formData) => {
   const data_prepared = convert_to_json(graphql_query); // ENCODE..
   const response = await axios.post('http://localhost:3001/api/v2/graphql', data_prepared, {
     headers: {
-      'content-type': 'application/json'
+      'Content-Type': 'application/json'
     }
   });
   console.log('axios response stigao', response);
