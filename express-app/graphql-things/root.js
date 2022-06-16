@@ -1,4 +1,5 @@
-const Glupost = require('../models/glupost-model')
+const Glupost = require('../models/glupost-model');
+const User = require('../models/user-model');
 
 
 // GRAPPHQL RESOLVERS
@@ -20,25 +21,38 @@ var root = {
     console.log('context.headers');
     console.log(context.headers);
     return 'We just tested arguments for resolver';
-  }, 
+  },
 
   napraviGlupost: async () => {
-    await Glupost.create(
+    const results = await Glupost.create(
       {
         nesto: 'stagod',
         nesto2: 'stagod2'
       }
     );
+
+    console.log(results)
     return 'Kreiranje u mongo Glupost uspjela';
   },
-  authRegister: async (args, context)=> {
+  authRegister: async (args, context) => {
     console.log('authRegister resolver');
     console.log('args');
     console.log(args);
-    return 'Vracamo neki odgovor od authRegister'
+
+    if (args.password === args.password2) {
+      const results = await User.create(
+        {
+          username: args.username,
+          password: args.password
+        }
+      );
+      console.log(results);
+      return 'Vracamo neki odgovor od authRegister'
+    } else {
+      return 'Error: Registracija nije uspjela'
+    }
   }
 };
 
 module.exports = root;
 
- 
