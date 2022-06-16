@@ -1,6 +1,28 @@
+const jwt = require('jsonwebtoken');
 const Glupost = require('../models/glupost-model');
 const User = require('../models/user-model');
 
+
+// HELPERS
+
+// const tokenCreate = (user_id) => {
+//   // create jsonwebtoken token
+//   const token = jwt.sign(
+//     { user_id: user_id },
+//     config.JWT_SECRET
+//   );
+//   return token;
+// };
+
+const JWT_SECRET = 'TAJNI_TOKEN';
+
+const tokenCreate = (user_id) => {
+  const token = jwt.sign(
+    { user_id: user_id},
+    JWT_SECRET
+  );
+  return token;
+};
 
 // GRAPPHQL RESOLVERS
 
@@ -51,7 +73,30 @@ var root = {
     } else {
       return 'Error: Registracija nije uspjela'
     }
-  }
+  },
+
+  authLogin: async (args, context) => {
+    console.log('authLogin resolver');
+    console.log('args');
+    console.log(args);
+
+    const results = await User.findOne(
+      {
+        username: args.username,
+        password: args.password
+      }
+    );
+    console.log(results);
+    if (results && results._id) {
+      const user_id = results._id;
+      console.log('user_id', user_id);
+      const token = tokenCreate(user_id);
+      console.log('token', token);
+      return token;
+    } else {
+      return 'Error: User with these credentials does not exist'
+    }
+  },
 };
 
 module.exports = root;
