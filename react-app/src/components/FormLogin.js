@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ajax } from '../utils/ajax-adapter';
 
 const FormLogin = () => {
 
@@ -54,6 +55,14 @@ const FormLogin = () => {
     if (validator(formState)) {
       console.log('click submit...');
       console.log(formState);
+      ajax.authLogin(formState)
+        .then((response)=> {
+          console.log(response);
+          if (response && response.data && response.data.data && response.data.data.authLogin){
+            const token = response.data.data.authLogin;
+            ajax.storeToken(token);
+          }
+        })
     } else {
       window.alert('Error')
     }
