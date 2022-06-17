@@ -19,7 +19,7 @@ const JWT_SECRET = 'TAJNI_TOKEN';
 
 const tokenCreate = (user_id) => {
   const token = jwt.sign(
-    { user_id: user_id},
+    { user_id: user_id },
     JWT_SECRET
   );
   return token;
@@ -114,10 +114,19 @@ var root = {
     const session = await AuthSession.findOne({
       token: token
     });
-    console.log(results);
+    console.log(session);
     if (session.user_id) {
-      const user_id = results.user_id;
-      // const user = 
+      const user_id = session.user_id;
+      const user = await User.findOne(
+        {
+          _id: user_id,
+        });
+      console.log(user);
+
+      return {
+        _id: user._id,
+        username: user.username
+      };
     }
   },
 };
