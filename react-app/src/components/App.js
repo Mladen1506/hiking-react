@@ -13,6 +13,7 @@ const App = () => {
   useEffect(() => {
 
     console.log('test1')
+    //autologin procedura
     ajax.myUserData()
       .then((response) => {
         console.log('test 2')
@@ -34,9 +35,7 @@ const App = () => {
   const handleClickHome = (e) => {
     dispatch({
       type: 'ROUTE_SET',
-      payload: {
-        route: 'HOME'
-      }
+      payload: 'HOME'
     })
   };
 

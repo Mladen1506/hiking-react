@@ -32,7 +32,9 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         isLoggedIn: true,
         myUserName: action.payload.username,
-        myUserId: action.payload._id
+        myUserId: action.payload._id,
+        route: 'HOME',
+        routeParams: {}
       };
 
     case 'LOGOUT':

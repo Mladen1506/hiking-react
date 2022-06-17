@@ -10,8 +10,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ajax } from '../utils/ajax-adapter';
+import { useDispatch } from 'react-redux';
 
 const FormRegister = () => {
+
+  const dispatch = useDispatch();
 
   const theme = createTheme();
 
@@ -59,6 +62,12 @@ const FormRegister = () => {
       console.log('click submit...');
       console.log(formState);
       ajax.authRegister(formState)
+      .then(() => {
+        dispatch({
+          type: 'ROUTE_SET',
+          payload: 'LOGIN'
+        })
+      })
     } else{
       window.alert('Error')
     }
