@@ -35,6 +35,16 @@ const rootReducer = (state = initialState, action) => {
         myUserId: action.payload._id
       };
 
+    case 'LOGOUT':
+      return {
+        ...state,
+        isLoggedIn: false,
+        myUserName: '',
+        myUserId: '',
+        route: 'HOME',
+        routeParams: {}
+      };
+
     default:
       return state;
   }

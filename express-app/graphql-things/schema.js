@@ -15,6 +15,7 @@ type User {
     napraviGlupost: String
     authRegister(username: String, password: String, password2 : String): String
     authLogin(username: String, password: String): String
+    authLogout(token: String): Boolean
     myUserData(token: String): User
   }
 `);
