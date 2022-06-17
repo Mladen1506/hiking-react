@@ -12,6 +12,11 @@ ajax.getStoredToken = () => {
   return token;
 };
 
+ajax.deleteStoredToken = () => {
+  const token = window.localStorage.removeItem('hiking_token');
+  return token;
+};
+
 ajax.authRegister = async (formData) => {
   // GRAPHQL
   const graphql_query = {
@@ -42,13 +47,33 @@ ajax.authLogin = async (formData) => {
   return response;
 };
 
+ajax.authLogout = async () => {
+
+  const token = ajax.getStoredToken();
+
+  // GRAPHQL
+  const graphql_query = {
+    query: '{ authLogout( token: "' + token + '") }'
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE..
+  const response = await axios.post('http://localhost:3001/api/v2/graphql', data_prepared, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  console.log('axios response za authLogout stigao', response);
+  return response;
+};
+
+
+
 ajax.myUserData = async () => {
 
   const token = ajax.getStoredToken();
 
   // GRAPHQL
   const graphql_query = {
-    query: '{ myUserData( token: "' + token + '") { _id username } }'
+    query: '{ myUserData( token: "' + token + '") { is_success _id username } }'
   };
   const data_prepared = convert_to_json(graphql_query); // ENCODE..
   const response = await axios.post('http://localhost:3001/api/v2/graphql', data_prepared, {
@@ -59,6 +84,8 @@ ajax.myUserData = async () => {
   console.log('axios response za myUserData stigao', response);
   return response;
 };
+
+
 
 
 ajax.send_post_request = () => {

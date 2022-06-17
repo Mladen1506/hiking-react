@@ -13,6 +13,7 @@ const App = () => {
   useEffect(() => {
 
     console.log('test1')
+    //autologin procedura
     ajax.myUserData()
       .then((response) => {
         console.log('test 2')
@@ -34,9 +35,7 @@ const App = () => {
   const handleClickHome = (e) => {
     dispatch({
       type: 'ROUTE_SET',
-      payload: {
-        route: 'HOME'
-      }
+      payload: 'HOME'
     })
   };
 
@@ -76,17 +75,41 @@ const App = () => {
   };
 
   const handleClickLogout = (e) => {
-    dispatch({
-      type: 'ROUTE_SET',
-      payload: 'LOGOUT'
-    })
+
+    ajax.authLogout()
+      .then(() => {
+        ajax.deleteStoredToken();
+        dispatch({
+          type: 'LOGOUT'
+        });
+      })
   };
 
   let jsxLoggedInMessage = null;
+  let jsxMenu = null;
   if (isLoggedIn) {
     jsxLoggedInMessage = (
       <>
         You are logged in <b>{myUserName}</b>
+      </>
+    );
+    jsxMenu = (
+      <>
+        <div onClick={handleClickHome}>Home</div>
+        <div onClick={handleClickMyTours}>My Tours</div>
+        <div onClick={handleClickAddTour}>Add Tour</div>
+        <div onClick={handleClickAddReview}>Add Review</div>
+        <div onClick={handleClickLogout}>Logout</div>
+      </>
+    );
+  } else {
+    // kada smo izlogovani
+    jsxMenu = (
+      <>
+        <div onClick={handleClickHome}>Home</div>
+        <div onClick={handleClickRegister}>Register</div>
+        <div onClick={handleClickLogin}>Login</div>
+
       </>
     );
   }
@@ -98,13 +121,14 @@ const App = () => {
           Hiking Trails
         </p>
         <nav>
-          <div onClick={handleClickHome}>Home</div>
+          {/* <div onClick={handleClickHome}>Home</div>
           <div onClick={handleClickRegister}>Register</div>
           <div onClick={handleClickLogin}>Login</div>
+          <div onClick={handleClickMyTours}>My Tours</div>
           <div onClick={handleClickAddTour}>Add Tour</div>
           <div onClick={handleClickAddReview}>Add Review</div>
-          <div onClick={handleClickMyTours}>My Tours</div>
-          <div onClick={handleClickLogout}>Logout</div>
+          <div onClick={handleClickLogout}>Logout</div> */}
+          {jsxMenu}
         </nav>
       </header>
       <div className='page-body'>
