@@ -123,10 +123,13 @@ var root = {
         });
       console.log(user);
 
-      return {
-        _id: user._id,
-        username: user.username
-      };
+      if (user && user._id && user.username) {
+        return {
+          is_success: true,
+          _id: user._id,
+          username: user.username
+        };
+      }
     }
   },
 };

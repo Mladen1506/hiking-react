@@ -5,6 +5,9 @@ import { dummyTours } from "../utils/dummy-tours";
 const initialState = {
   route: 'HOME',
   routeParams: {},
+  isLoggedIn: false,
+  myUserName: '',
+  myUserId: '',
   tours: dummyTours,
   reviews: dummyReviews,
 };
@@ -24,7 +27,14 @@ const rootReducer = (state = initialState, action) => {
         route: action.payload.route,
         routeParams: action.payload.params
       };
-  
+    case 'LOGIN_SUCCESS':
+      return {
+        ...state,
+        isLoggedIn: true,
+        myUserName: action.payload.username,
+        myUserId: action.payload._id
+      };
+
     default:
       return state;
   }
