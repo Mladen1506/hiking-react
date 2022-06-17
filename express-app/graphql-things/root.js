@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Glupost = require('../models/glupost-model');
 const User = require('../models/user-model');
+const AuthSession = require('../models/auth-session-model');
 
 
 // HELPERS
@@ -18,7 +19,7 @@ const JWT_SECRET = 'TAJNI_TOKEN';
 
 const tokenCreate = (user_id) => {
   const token = jwt.sign(
-    { user_id: user_id},
+    { user_id: user_id },
     JWT_SECRET
   );
   return token;
@@ -92,9 +93,40 @@ var root = {
       console.log('user_id', user_id);
       const token = tokenCreate(user_id);
       console.log('token', token);
+
+      await AuthSession.create(
+        {
+          user_id: user_id,
+          token: token
+        }
+      );
+
       return token;
     } else {
       return 'Error: User with these credentials does not exist'
+    }
+  },
+  myUserData: async (args, context) => {
+    console.log('myUserData resolver');
+    console.log('args');
+    console.log(args);
+    const token = args.token;
+    const session = await AuthSession.findOne({
+      token: token
+    });
+    console.log(session);
+    if (session.user_id) {
+      const user_id = session.user_id;
+      const user = await User.findOne(
+        {
+          _id: user_id,
+        });
+      console.log(user);
+
+      return {
+        _id: user._id,
+        username: user.username
+      };
     }
   },
 };

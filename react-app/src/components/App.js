@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { ajax } from '../utils/ajax-adapter';
 import PageRouter from './PageRouter';
 
 const App = () => {
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    ajax.myUserData()
+  }, []);
 
   const handleClickHome = (e) => {
     dispatch({
