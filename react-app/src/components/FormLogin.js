@@ -63,6 +63,7 @@ const FormLogin = () => {
           if (response && response.data && response.data.data && response.data.data.authLogin){
             const token = response.data.data.authLogin;
             ajax.storeToken(token);
+            ajax.configureHeaders(token);
             // form login procedura zavrsena
             // auto login procedura 
             ajax.myUserData()

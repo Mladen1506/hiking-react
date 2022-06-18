@@ -53,6 +53,19 @@ const App = () => {
     })
   };
 
+  const handleClickLogout = (e) => {
+
+    ajax.authLogout()
+      .then(() => {
+        ajax.deleteStoredToken();
+        ajax.configureHeaders(null);
+        dispatch({
+          type: 'LOGOUT'
+        });
+      })
+  };
+
+
   const handleClickAddTour = (e) => {
     dispatch({
       type: 'ROUTE_SET',
@@ -74,16 +87,7 @@ const App = () => {
     })
   };
 
-  const handleClickLogout = (e) => {
-
-    ajax.authLogout()
-      .then(() => {
-        ajax.deleteStoredToken();
-        dispatch({
-          type: 'LOGOUT'
-        });
-      })
-  };
+  
 
   let jsxLoggedInMessage = null;
   let jsxMenu = null;
