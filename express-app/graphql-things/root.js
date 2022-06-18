@@ -126,7 +126,13 @@ var root = {
     console.log('myUserData resolver');
     console.log('args');
     console.log(args);
-    const token = args.token;
+    // console.log('context');
+    // console.log(context);
+
+    const req = context;
+    const token = req.headers['x-hiking-token'];
+
+    // const token = args.token;
     console.log(token);
     const session = await AuthSession.findOne({
       token: token
