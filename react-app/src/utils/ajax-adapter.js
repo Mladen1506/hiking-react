@@ -66,15 +66,22 @@ ajax.authLogin = async (formData) => {
 
 ajax.authLogout = async () => {
 
-  const token = ajax.getStoredToken();
+  //const token = ajax.getStoredToken();
 
   // GRAPHQL
+  /*
   const graphql_query = {
     query: '{ authLogout( token: "' + token + '") }'
   };
+  */
+
+  const graphql_query = {
+    query: '{ authLogout }'
+  };
+
   const data_prepared = convert_to_json(graphql_query); // ENCODE..
   const response = await axios.post('http://localhost:3001/api/v2/graphql', data_prepared, {
-      headers: ajax.preparedHeadersForAxios
+    headers: ajax.preparedHeadersForAxios
   });
   console.log('axios response za authLogout stigao', response);
   return response;
@@ -99,7 +106,7 @@ ajax.myUserData = async () => {
   };
   const data_prepared = convert_to_json(graphql_query); // ENCODE..
   const response = await axios.post('http://localhost:3001/api/v2/graphql', data_prepared, {
-      headers: ajax.preparedHeadersForAxios
+    headers: ajax.preparedHeadersForAxios
   });
   console.log('axios response za myUserData stigao', response);
   return response;
