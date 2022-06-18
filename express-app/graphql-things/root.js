@@ -25,6 +25,25 @@ const tokenCreate = (user_id) => {
   return token;
 };
 
+const checkIsLoggedIn = async (token) => {
+  console.log('checkIsLoggedIn helper');
+  console.log(token);
+  let is_logged_in = false;
+  let user_id = null;
+
+  const session = await AuthSession.findOne({
+    token: token
+  });
+  console.log(session);
+  if (session.user_id) {
+    user_id = session.user_id;
+    is_logged_in = true;
+  }
+  return {
+    is_logged_in,
+    user_id
+  };
+}
 // GRAPPHQL RESOLVERS
 
 var root = {
@@ -109,10 +128,17 @@ var root = {
 
   authLogout: async (args, context) => {
     console.log('authLogout resolver');
-    console.log('args');
-    console.log(args);
-    const token = args.token;
+    // console.log('args');
+    // console.log(args);
+    // const token = args.token;
+    // console.log(token);
+    const req = context;
+
+    const token = req.headers['x-hiking-token'];
+    // const token = args.token;
     console.log(token);
+
+
     // mora iz baze sesija da obrise onu sa ovim tokenom
 
     await AuthSession.findOneAndDelete({
@@ -134,12 +160,16 @@ var root = {
 
     // const token = args.token;
     console.log(token);
+    /*
     const session = await AuthSession.findOne({
       token: token
     });
     console.log(session);
-    if (session.user_id) {
-      const user_id = session.user_id;
+    */
+
+    const auth = await checkIsLoggedIn(token);
+    if (auth.is_logged_in) {
+      const user_id = auth.user_id;
       const user = await User.findOne(
         {
           _id: user_id,
