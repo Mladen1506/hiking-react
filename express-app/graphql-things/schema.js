@@ -4,8 +4,8 @@ var { buildSchema } = require('graphql');
 // Construct a schema, using GraphQL schema language
 var schema = buildSchema(`
 type User {
-  is_success: Boolean
   _id: String
+  is_success: Boolean
   username: String
 }
   type Query {
@@ -17,6 +17,7 @@ type User {
     authLogin(username: String, password: String): String
     authLogout: Boolean
     myUserData: User
+    tourCreate(name: String, description: String, date: String, difficulty: String, trail_length: Int, max_participants: Int): Boolean
   }
 `);
 

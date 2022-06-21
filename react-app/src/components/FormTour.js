@@ -11,6 +11,7 @@ import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getSingleTourById } from '../utils/tour-utils';
+import { ajax } from '../utils/ajax-adapter';
 
 
 
@@ -75,7 +76,10 @@ const FormTour = (props) => {
       if (modeEdit) {
 
       } else {
-        
+        ajax.tourCreate(formState)
+        .then((response) => {
+          console.log(response);
+        })
       }
     } else {
       window.alert('Form validation error')
