@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const Glupost = require('../models/glupost-model');
 const User = require('../models/user-model');
 const AuthSession = require('../models/auth-session-model');
+const Tour = require('../models/tour-model');
 
 
 // HELPERS
@@ -183,6 +184,33 @@ var root = {
           username: user.username
         };
       }
+    }
+  },
+
+  tourCreate: async (args, context) => {
+    console.log('tourCreate resolver');
+    console.log('args');
+    console.log(args);
+    const req = context;
+    const token = req.headers['x-hiking-token'];
+    console.log(token);
+    const auth = await checkIsLoggedIn(token);
+    if (auth.is_logged_in) {
+      const user_id = auth.user_id;
+      const results = await Tour.create({
+        user_id: user_id,
+        name: args.name,
+        description: args.description,
+        date: args.date,
+        difficulty: args.difficulty,
+        trail_length: args.trail_length,
+        max_participants: args.max_participants
+      });
+      console.log(results);
+      return true;
+
+    } else {
+      return false;
     }
   },
 };

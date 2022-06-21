@@ -113,6 +113,30 @@ ajax.myUserData = async () => {
 };
 
 
+ajax.tourCreate = async (formData) => {
+  // GRAPHQL
+  const graphql_query = {
+    query: '{ tourCreate( name: "' + formData.name + '" description: "' + formData.description + '" date: "' + formData.date + '" difficulty: "' + formData.difficulty + '" trail_length: ' + formData.trail_length + ' max_participants: ' + formData.max_participants + ') }'
+};
+/*
+name: '',
+description: '',
+date: '06/14/2022',
+difficulty: 'MEDIUM',
+trail_length: 14,
+max_participants: 99
+*/
+
+
+const data_prepared = convert_to_json(graphql_query); // ENCODE..
+const response = await axios.post('http://localhost:3001/api/v2/graphql', data_prepared, {
+    headers: ajax.preparedHeadersForAxios
+});
+  console.log('axios response za ajax.tourCreate stigao', response);
+return response;
+};
+
+
 
 
 ajax.send_post_request = () => {
@@ -125,3 +149,4 @@ ajax.sacuvaj_token_lokalno_i_trajno = (token) => {
   // ako je u pitanju android react app
   // androidStorage('hiking_token', token)
 }
+
