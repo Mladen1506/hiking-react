@@ -244,6 +244,12 @@ var root = {
       return false;
     }
   },
+
+  reviewGetAll: async (args, context) => {
+    console.log('reviewGetAll resolver')
+    const results = await Review.find({});
+    return results;
+  },
 };
 
 module.exports = root;

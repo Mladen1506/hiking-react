@@ -54,6 +54,27 @@ const App = () => {
           }
         })
     }, 500)
+    // takodje fecujemo i reviews
+
+    // korak 1 pre fetchovanja postavljamo spiner
+    dispatch({
+      type: 'REVIEW_FETCHING'
+    });
+
+    ajax.reviewGetAll()
+      .then((response) => {
+        console.log('response za reviewGetAll');
+        console.log(response);
+
+        if (response && response.data && response.data.data && Array.isArray(response.data.data.reviewGetAll)) {
+          // korak kada se fetchovanje zavrsi
+          dispatch({
+            type: 'REVIEWS_FETCHED',
+            payload: response.data.data.reviewGetAll
+          });
+        }
+      })
+
   }, []);
 
   const handleClickHome = (e) => {
@@ -97,12 +118,12 @@ const App = () => {
     })
   };
 
-  const handleClickAddReview = (e) => {
-    dispatch({
-      type: 'ROUTE_SET',
-      payload: 'ADD_REVIEW'
-    })
-  };
+  // const handleClickAddReview = (e) => {
+  //   dispatch({
+  //     type: 'ROUTE_SET',
+  //     payload: 'ADD_REVIEW'
+  //   })
+  // };
 
   const handleClickMyTours = (e) => {
     dispatch({
@@ -126,7 +147,7 @@ const App = () => {
         <div onClick={handleClickHome}>Home</div>
         <div onClick={handleClickMyTours}>My Tours</div>
         <div onClick={handleClickAddTour}>Add Tour</div>
-        <div onClick={handleClickAddReview}>Add Review</div>
+        {/* <div onClick={handleClickAddReview}>Add Review</div> */}
         <div onClick={handleClickLogout}>Logout</div>
       </>
     );
