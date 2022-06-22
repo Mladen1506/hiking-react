@@ -8,6 +8,19 @@ type User {
   is_success: Boolean
   username: String
 }
+
+type Tour {
+  _id: String
+  user_id: String
+  name: String 
+  description: String 
+  date: String 
+  difficulty: String 
+  trail_length: Int 
+  max_participants: Int
+}
+
+
   type Query {
     hello: String
     random: Float!
@@ -18,6 +31,7 @@ type User {
     authLogout: Boolean
     myUserData: User
     tourCreate(name: String, description: String, date: String, difficulty: String, trail_length: Int, max_participants: Int): Boolean
+    tourGetAll: [Tour]
   }
 `);
 
