@@ -20,6 +20,13 @@ type Tour {
   max_participants: Int
 }
 
+type Review {
+  _id: String
+  user_id: String
+  tour_id: String
+  rating: Int 
+  text: String 
+}
 
   type Query {
     hello: String
@@ -33,6 +40,7 @@ type Tour {
     tourCreate(name: String, description: String, date: String, difficulty: String, trail_length: Int, max_participants: Int): Boolean
     tourGetAll: [Tour]
     reviewCreate(rating: Int, text: String, tour_id: String): Boolean
+    reviewGetAll: [Review]
   }
 `);
 
