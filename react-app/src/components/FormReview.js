@@ -8,16 +8,19 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FormControlLabel, FormLabel, Radio, RadioGroup, Rating } from '@mui/material';
+import { ajax } from '../utils/ajax-adapter';
 
-const FormReview = () => {
-    const theme = createTheme();
+const FormReview = (props) => {
+  const theme = createTheme();
 
-    const preset = {
-      rating: 0,
-      text: ''
-    };
+  const tour_id = props.tour_id;
 
-    const [formState, setFormState] = useState(preset);
+  const preset = {
+    rating: 0,
+    text: ''
+  };
+
+  const [formState, setFormState] = useState(preset);
 
   const handleChange = (e) => {
     const target = e.target;
@@ -33,10 +36,10 @@ const FormReview = () => {
   const validator = (formState) => {
     let test = true;
 
-    if(!(parseInt(formState.rating) > 0)){
+    if (!(parseInt(formState.rating) > 0)) {
       test = false;
     }
-    if(formState.text === ''){
+    if (formState.text === '') {
       test = false;
     }
     return test;
@@ -44,17 +47,21 @@ const FormReview = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(validator(formState)){
+    if (validator(formState)) {
       console.log('submit...');
       console.log(formState);
       const submitData = {
         ...formState,
-        tour_id: '2',
-        user_id: 0,
-        rating: parseInt(formState.rating)
+        rating: parseInt(formState.rating),
+        tour_id: tour_id,
+        // user_id: '???'
       };
       console.log(submitData);
-    } else{
+      ajax.reviewCreate(submitData)
+        .then((response) => {
+          console.log('response za create review stigao', response);
+        })
+    } else {
       window.alert('Form validation error')
     }
   };
@@ -71,7 +78,7 @@ const FormReview = () => {
             alignItems: 'center',
           }}
         >
-          <Typography component="h1" variant="h3">
+          <Typography component="h2" variant="h5">
             Your Review
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
