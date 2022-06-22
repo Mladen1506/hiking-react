@@ -2,6 +2,7 @@
 import { Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import Spinner from "./Spinner";
 import TourItem from "./TourItem";
 
 const PageMyTours = (props) => {
@@ -29,7 +30,14 @@ const PageMyTours = (props) => {
     })
   };
 
-  const myTours = tours;
+  const myTours = tours.data;
+
+  let jsxSpinner = null;
+  if (tours.fetching) {
+    jsxSpinner = (
+      <Spinner />
+    );
+  }
 
   let jsx = myTours.map((tour, index) => {
     const tour_id = tour._id;
@@ -62,6 +70,7 @@ const PageMyTours = (props) => {
       <h1>My Tours</h1>
       <table className="my-tours">
         <tbody>
+          {jsxSpinner}
           {jsx}
         </tbody>
       </table>

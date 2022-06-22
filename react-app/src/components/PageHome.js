@@ -2,6 +2,7 @@ import { CssBaseline, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, Text
 import { Box, Container } from "@mui/system";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import Spinner from "./Spinner";
 import TourItem from "./TourItem";
 
 const PageHome = (props) => {
@@ -29,7 +30,7 @@ const PageHome = (props) => {
 
   const tours = useSelector(state => state.tours);
 
-  const filteredTours = tours.filter((tour) => {
+  const filteredTours = tours.data.filter((tour) => {
 
     let test = true;
 
@@ -54,6 +55,13 @@ const PageHome = (props) => {
 
     return test;
   });
+
+  let jsxSpinner = null;
+  if (tours.fetching) {
+      jsxSpinner = (
+         <Spinner />
+      );
+  }
 
   let jsx = filteredTours.map((tour, index) => {
     return (
@@ -133,6 +141,8 @@ const PageHome = (props) => {
           </RadioGroup>
         </Box>
       </Container>
+      <h4>Tours</h4>
+      {jsxSpinner}
       {jsx}
     </>
   );

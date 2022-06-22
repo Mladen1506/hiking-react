@@ -36,7 +36,7 @@ const FormTour = (props) => {
   const [formState, setFormState] = useState(preset);
 
   useEffect(() => {
-    const editingTour = getSingleTourById(tour_id, tours);
+    const editingTour = getSingleTourById(tour_id, tours.data);
     if (editingTour !== null){
       setFormState(editingTour);
     }

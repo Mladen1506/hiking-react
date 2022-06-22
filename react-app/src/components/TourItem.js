@@ -16,7 +16,7 @@ const TourItem = (props) => {
 
 
 
-  let averageRating = calculateAverageRating(reviews, tour_id);
+  let averageRating = calculateAverageRating(reviews.data, tour_id);
 
   const handleClickSingleTour = (e) => {
     dispatch({
