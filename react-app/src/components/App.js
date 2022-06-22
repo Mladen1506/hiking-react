@@ -34,18 +34,26 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    ajax.tourGetAll()
-      .then((response) => {
-        console.log('response za tourGetAll');
-        console.log(response);
+    // trazimo podatke od svih tura 
+    // korak 1 pre fetchovanja postavljamo spiner
+    dispatch({
+      type: 'TOURS_FETCHING'
+    });
+    setTimeout(() => {
+      ajax.tourGetAll()
+        .then((response) => {
+          console.log('response za tourGetAll');
+          console.log(response);
 
-        if (response && response.data && response.data.data && Array.isArray(response.data.data.tourGetAll)) {
-          dispatch({
-            type: 'TOURS_FETCHED',
-            payload: response.data.data.tourGetAll
-          });
-        }
-      })
+          if (response && response.data && response.data.data && Array.isArray(response.data.data.tourGetAll)) {
+            // korak kada se fetchovanje zavrsi
+            dispatch({
+              type: 'TOURS_FETCHED',
+              payload: response.data.data.tourGetAll
+            });
+          }
+        })
+    }, 500)
   }, []);
 
   const handleClickHome = (e) => {
