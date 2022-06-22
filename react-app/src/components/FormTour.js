@@ -28,7 +28,7 @@ const FormTour = (props) => {
     name: '',
     description: '',
     date: '06/14/2022',
-    difficulty: 'MEDIUM',
+    difficulty: 'EASY',
     trail_length: 14,
     max_participants: 99
   };

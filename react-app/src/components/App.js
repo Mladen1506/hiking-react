@@ -1,3 +1,4 @@
+import { responsiveProperty } from '@mui/material/styles/cssUtils';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ajax } from '../utils/ajax-adapter';
@@ -30,6 +31,21 @@ const App = () => {
       })
 
     console.log('test 3')
+  }, []);
+
+  useEffect(() => {
+    ajax.tourGetAll()
+      .then((response) => {
+        console.log('response za tourGetAll');
+        console.log(response);
+
+        if (response && response.data && response.data.data && Array.isArray(response.data.data.tourGetAll)) {
+          dispatch({
+            type: 'TOURS_FETCHED',
+            payload: response.data.data.tourGetAll
+          });
+        }
+      })
   }, []);
 
   const handleClickHome = (e) => {
@@ -87,7 +103,7 @@ const App = () => {
     })
   };
 
-  
+
 
   let jsxLoggedInMessage = null;
   let jsxMenu = null;

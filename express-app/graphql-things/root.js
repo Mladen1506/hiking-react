@@ -213,6 +213,14 @@ var root = {
       return false;
     }
   },
+
+  tourGetAll: async (args, context) => {
+    console.log('tourGetAll resolver')
+    const results = await Tour.find({});
+    return results;
+  },
+
+
 };
 
 module.exports = root;

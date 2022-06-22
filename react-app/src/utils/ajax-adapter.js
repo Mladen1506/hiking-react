@@ -118,22 +118,30 @@ ajax.tourCreate = async (formData) => {
   const graphql_query = {
     query: '{ tourCreate( name: "' + formData.name + '" description: "' + formData.description + '" date: "' + formData.date + '" difficulty: "' + formData.difficulty + '" trail_length: ' + formData.trail_length + ' max_participants: ' + formData.max_participants + ') }'
 };
-/*
-name: '',
-description: '',
-date: '06/14/2022',
-difficulty: 'MEDIUM',
-trail_length: 14,
-max_participants: 99
-*/
-
-
 const data_prepared = convert_to_json(graphql_query); // ENCODE..
 const response = await axios.post('http://localhost:3001/api/v2/graphql', data_prepared, {
     headers: ajax.preparedHeadersForAxios
 });
   console.log('axios response za ajax.tourCreate stigao', response);
 return response;
+};
+
+ajax.tourGetAll = async () => {
+  // GRAPHQL
+  /*
+  const graphql_query = {
+    query: '{ tourGetAll { _id name description date difficulty trail_length max_participants user_created date_created} }'
+  };
+  */
+  const graphql_query = {
+    query: '{ tourGetAll { _id name description date difficulty trail_length max_participants user_id} }'
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE..
+  const response = await axios.post('http://localhost:3001/api/v2/graphql', data_prepared, {
+    headers: ajax.preparedHeadersForAxios
+  });
+  console.log('axios response za tourGetAll stigao', response);
+  return response;
 };
 
 
