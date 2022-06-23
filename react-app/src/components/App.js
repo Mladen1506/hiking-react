@@ -1,6 +1,7 @@
 import { responsiveProperty } from '@mui/material/styles/cssUtils';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { LOGIN_SUCCESS } from '../redux/actions';
 import { ajax } from '../utils/ajax-adapter';
 import PageRouter from './PageRouter';
 
@@ -24,7 +25,7 @@ const App = () => {
           const myUserData = response.data.data.myUserData && response.data.data.myUserData;
           dispatch({
             // type: 'MY_USER_DATA_FETCHED',
-            type: 'LOGIN_SUCCESS',
+            type: LOGIN_SUCCESS,
             payload: myUserData
           });
         }
