@@ -11,6 +11,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { ajax } from '../utils/ajax-adapter';
 import { useDispatch } from 'react-redux';
+import { actionAuthFormRegister, actionAuthRegister } from '../redux/actions';
 
 const FormRegister = () => {
 
@@ -61,13 +62,7 @@ const FormRegister = () => {
     if(validator(formState)){
       console.log('click submit...');
       console.log(formState);
-      ajax.authRegister(formState)
-      .then(() => {
-        dispatch({
-          type: 'ROUTE_SET',
-          payload: 'LOGIN'
-        })
-      })
+      dispatch(actionAuthRegister(formState));
     } else{
       window.alert('Error')
     }
