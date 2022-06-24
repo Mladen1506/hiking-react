@@ -143,6 +143,19 @@ ajax.tourUpdate = async (formData) => {
   return response;
 };
 
+ajax.tourDelete = async (tour_id) => {
+  // GRAPHQL
+  const graphql_query = {
+    query: '{ tourDelete( tour_id: "' + tour_id + '") }'
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE..
+  const response = await axios.post(urlLib.apiGraphQL(), data_prepared, {
+    headers: ajax.preparedHeadersForAxios
+  });
+  console.log('axios response za tourDelete stigao', response);
+  return response;
+};
+
 ajax.tourGetAll = async () => {
   // GRAPHQL
   /*

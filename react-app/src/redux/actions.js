@@ -6,6 +6,7 @@ import { ajax } from "../utils/ajax-adapter";
 
 export const ROUTE_SET = 'ROUTE_SET';
 export const ROUTE_WITH_PARAMS_SET = 'ROUTE_WITH_PARAMS_SET';
+export const REFRESH = 'REFRESH';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGOUT = 'LOGOUT';
 export const TOURS_FETCHING = 'TOURS_FETCHING';
@@ -158,6 +159,9 @@ export const actionReviewCreate = (formState) => {
     ajax.reviewCreate(formState)
       .then((response) => {
         console.log('response za create review stigao', response);
+        dispatch({
+          type: REFRESH
+        });
       })
   };
 };
@@ -169,16 +173,32 @@ export const actionTourCreate = (formState) => {
     ajax.tourCreate(formState)
       .then((response) => {
         console.log(response);
+        // nakon kreiranja ili apdejta ture redirektujemo na MY TOURS stranicu
+        dispatch(actionRouteSet('MY_TOURS'));
+      })
+    };
+  };
+  
+  export const actionTourUpdate = (formState) => {
+    // THUNK
+    return (dispatch) => {
+      ajax.tourUpdate(formState)
+      .then((response) => {
+        console.log(response);
+        // nakon kreiranja ili apdejta ture redirektujemo na MY TOURS stranicu
+        dispatch(actionRouteSet('MY_TOURS'));
       })
   };
 };
 
-export const actionTourUpdate = (formState) => {
+export const actionTourDelete = (formState) => {
   // THUNK
   return (dispatch) => {
-    ajax.tourUpdate(formState)
+    ajax.tourDelete(formState)
       .then((response) => {
         console.log(response);
+        // nakon brisanja ili ture redirektujemo na MY TOURS stranicu
+        dispatch(actionRouteSet('MY_TOURS'));
       })
   };
 };

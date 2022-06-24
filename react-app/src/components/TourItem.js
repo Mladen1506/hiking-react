@@ -27,7 +27,7 @@ const TourItem = (props) => {
 
   return (
     <div>
-      <h3 onClick={handleClickSingleTour}>Tour Name: {tour.name}</h3>
+      <h3 onClick={handleClickSingleTour}>{tour.name}</h3>
       <div>About Tour:{tour.description}</div>
       <div>Tour Date:{tour.date}</div>
       <div>Difficulty: {tour.difficulty}</div>
