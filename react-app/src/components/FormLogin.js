@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { actionAuthFormLogin } from '../redux/actions';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,8 +15,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { ajax } from '../utils/ajax-adapter';
-import { useDispatch } from 'react-redux';
 
 const FormLogin = () => {
   const dispatch = useDispatch();
@@ -57,31 +57,7 @@ const FormLogin = () => {
     if (validator(formState)) {
       console.log('click submit...');
       console.log(formState);
-      ajax.authLogin(formState)
-        .then((response)=> {
-          console.log(response);
-          if (response && response.data && response.data.data && response.data.data.authLogin){
-            const token = response.data.data.authLogin;
-            ajax.storeToken(token);
-            ajax.configureHeaders(token);
-            // form login procedura zavrsena
-            // auto login procedura 
-            ajax.myUserData()
-              .then((response) => {
-                console.log('test 2')
-                console.log('.then() response za myuserdata primljen', response)
-                if (response && response.data && response.data.data && response.data.data.myUserData._id) {
-                  console.log(response.data.data.myUserData)
-                  const myUserData = response.data.data.myUserData && response.data.data.myUserData;
-                  dispatch({
-                    // type: 'MY_USER_DATA_FETCHED',
-                    type: 'LOGIN_SUCCESS',
-                    payload: myUserData
-                  });
-                }
-              })
-          }
-        })
+      dispatch(actionAuthFormLogin(formState));
     } else {
       window.alert('Error')
     }

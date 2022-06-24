@@ -8,14 +8,17 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getSingleTourById } from '../utils/tour-utils';
-import { ajax } from '../utils/ajax-adapter';
+import { actionTourCreate, actionTourUpdate } from '../redux/actions';
 
 
 
 const FormTour = (props) => {
+  
+  const dispatch = useDispatch();
+
   const theme = createTheme();
 
   const tours = useSelector((state) => state.tours);
@@ -74,12 +77,13 @@ const FormTour = (props) => {
       console.log('submit...');
       console.log(formState);
       if (modeEdit) {
-
+        const formState2 = {
+          ...formState,
+          tour_id: tour_id
+        };
+        dispatch(actionTourUpdate(formState2));
       } else {
-        ajax.tourCreate(formState)
-        .then((response) => {
-          console.log(response);
-        })
+        dispatch(actionTourCreate(formState));
       }
     } else {
       window.alert('Form validation error')
@@ -180,7 +184,7 @@ const FormTour = (props) => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Edit
+                Update
               </Button>
             ) : (
               <Button

@@ -1,8 +1,7 @@
-import { responsiveProperty } from '@mui/material/styles/cssUtils';
+
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { LOGIN_SUCCESS } from '../redux/actions';
-import { ajax } from '../utils/ajax-adapter';
+import { actionAuthAutoLogin, actionAuthLogout, actionReviewsNeeded, actionRouteSet, actionToursNeeded, } from '../redux/actions';
 import PageRouter from './PageRouter';
 
 const App = () => {
@@ -13,124 +12,41 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-
-    console.log('test1')
-    //autologin procedura
-    ajax.myUserData()
-      .then((response) => {
-        console.log('test 2')
-        console.log('.then() response za myuserdata primljen', response)
-        if (response && response.data && response.data.data && response.data.data.myUserData._id) {
-          console.log(response.data.data.myUserData)
-          const myUserData = response.data.data.myUserData && response.data.data.myUserData;
-          dispatch({
-            // type: 'MY_USER_DATA_FETCHED',
-            type: LOGIN_SUCCESS,
-            payload: myUserData
-          });
-        }
-      })
-
-    console.log('test 3')
+    dispatch(actionAuthAutoLogin());
   }, []);
 
   useEffect(() => {
-    // trazimo podatke od svih tura 
-    // korak 1 pre fetchovanja postavljamo spiner
-    dispatch({
-      type: 'TOURS_FETCHING'
-    });
-    setTimeout(() => {
-      ajax.tourGetAll()
-        .then((response) => {
-          console.log('response za tourGetAll');
-          console.log(response);
-
-          if (response && response.data && response.data.data && Array.isArray(response.data.data.tourGetAll)) {
-            // korak kada se fetchovanje zavrsi
-            dispatch({
-              type: 'TOURS_FETCHED',
-              payload: response.data.data.tourGetAll
-            });
-          }
-        })
-    }, 500)
-    // takodje fecujemo i reviews
-
-    // korak 1 pre fetchovanja postavljamo spiner
-    dispatch({
-      type: 'REVIEW_FETCHING'
-    });
-
-    ajax.reviewGetAll()
-      .then((response) => {
-        console.log('response za reviewGetAll');
-        console.log(response);
-
-        if (response && response.data && response.data.data && Array.isArray(response.data.data.reviewGetAll)) {
-          // korak kada se fetchovanje zavrsi
-          dispatch({
-            type: 'REVIEWS_FETCHED',
-            payload: response.data.data.reviewGetAll
-          });
-        }
-      })
+    dispatch(actionToursNeeded());
+    dispatch(actionReviewsNeeded());
 
   }, []);
 
   const handleClickHome = (e) => {
-    dispatch({
-      type: 'ROUTE_SET',
-      payload: 'HOME'
-    })
+    dispatch(actionRouteSet('HOME'));
   };
 
   const handleClickRegister = (e) => {
-    dispatch({
-      type: 'ROUTE_SET',
-      payload: 'REGISTER'
-    })
+    dispatch(actionRouteSet('REGISTER'));
   };
 
   const handleClickLogin = (e) => {
-    dispatch({
-      type: 'ROUTE_SET',
-      payload: 'LOGIN'
-    })
+    dispatch(actionRouteSet('LOGIN'));
   };
 
   const handleClickLogout = (e) => {
-
-    ajax.authLogout()
-      .then(() => {
-        ajax.deleteStoredToken();
-        ajax.configureHeaders(null);
-        dispatch({
-          type: 'LOGOUT'
-        });
-      })
+    dispatch(actionAuthLogout());
   };
-
-
-  const handleClickAddTour = (e) => {
-    dispatch({
-      type: 'ROUTE_SET',
-      payload: 'ADD_TOUR'
-    })
-  };
-
-  // const handleClickAddReview = (e) => {
-  //   dispatch({
-  //     type: 'ROUTE_SET',
-  //     payload: 'ADD_REVIEW'
-  //   })
-  // };
 
   const handleClickMyTours = (e) => {
-    dispatch({
-      type: 'ROUTE_SET',
-      payload: 'MY_TOURS'
-    })
+    dispatch(actionRouteSet('MY_TOURS'));
+  };
+
+  const handleClickAddTour = (e) => {
+    dispatch(actionRouteSet('ADD_TOUR'));
+  };
+
+  const handleClickAddReview = (e) => {
+    dispatch(actionRouteSet('ADD_REVIEW'));
   };
 
 
@@ -147,8 +63,6 @@ const App = () => {
       <>
         <div onClick={handleClickHome}>Home</div>
         <div onClick={handleClickMyTours}>My Tours</div>
-        <div onClick={handleClickAddTour}>Add Tour</div>
-        {/* <div onClick={handleClickAddReview}>Add Review</div> */}
         <div onClick={handleClickLogout}>Logout</div>
       </>
     );
@@ -159,6 +73,7 @@ const App = () => {
         <div onClick={handleClickHome}>Home</div>
         <div onClick={handleClickRegister}>Register</div>
         <div onClick={handleClickLogin}>Login</div>
+        <div onClick={handleClickAddReview}>Add Review</div>
 
       </>
     );

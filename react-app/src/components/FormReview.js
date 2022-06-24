@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { actionReviewCreate } from '../redux/actions';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -11,6 +13,8 @@ import { FormControlLabel, FormLabel, Radio, RadioGroup, Rating } from '@mui/mat
 import { ajax } from '../utils/ajax-adapter';
 
 const FormReview = (props) => {
+  const dispatch = useDispatch();
+
   const theme = createTheme();
 
   const tour_id = props.tour_id;
@@ -50,17 +54,14 @@ const FormReview = (props) => {
     if (validator(formState)) {
       console.log('submit...');
       console.log(formState);
-      const submitData = {
+      const formState2 = {
         ...formState,
         rating: parseInt(formState.rating),
         tour_id: tour_id,
         // user_id: '???'
       };
-      console.log(submitData);
-      ajax.reviewCreate(submitData)
-        .then((response) => {
-          console.log('response za create review stigao', response);
-        })
+      console.log(formState2);
+      dispatch(actionReviewCreate(formState2));
     } else {
       window.alert('Form validation error')
     }

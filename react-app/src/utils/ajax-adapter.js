@@ -120,13 +120,27 @@ ajax.tourCreate = async (formData) => {
   // GRAPHQL
   const graphql_query = {
     query: '{ tourCreate( name: "' + formData.name + '" description: "' + formData.description + '" date: "' + formData.date + '" difficulty: "' + formData.difficulty + '" trail_length: ' + formData.trail_length + ' max_participants: ' + formData.max_participants + ') }'
-};
-const data_prepared = convert_to_json(graphql_query); // ENCODE..
-const response = await axios.post(urlLib.apiGraphQL(), data_prepared, {
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE..
+  const response = await axios.post(urlLib.apiGraphQL(), data_prepared, {
     headers: ajax.preparedHeadersForAxios
-});
+  });
   console.log('axios response za ajax.tourCreate stigao', response);
-return response;
+  return response;
+};
+
+
+ajax.tourUpdate = async (formData) => {
+  // GRAPHQL
+  const graphql_query = {
+    query: '{ tourUpdate( name: "' + formData.name + '" description: "' + formData.description + '" date: "' + formData.date + '" difficulty: "' + formData.difficulty + '" trail_length: ' + formData.trail_length + ' max_participants: ' + formData.max_participants + ' tour_id: "' + formData.tour_id + '") }'
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE..
+  const response = await axios.post(urlLib.apiGraphQL(), data_prepared, {
+    headers: ajax.preparedHeadersForAxios
+  });
+  console.log('axios response za tourUpdate stigao', response);
+  return response;
 };
 
 ajax.tourGetAll = async () => {
@@ -162,7 +176,7 @@ ajax.reviewCreate = async (formData) => {
 
 ajax.reviewGetAll = async () => {
   // GRAPHQL
- 
+
   const graphql_query = {
     query: '{ reviewGetAll { _id user_id tour_id rating text } }'
   };
