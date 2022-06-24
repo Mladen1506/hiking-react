@@ -1,11 +1,21 @@
 import { CssBaseline, FormControlLabel, FormLabel, Grid, Radio, RadioGroup, TextField } from "@mui/material";
 import { Box, Container } from "@mui/system";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { actionReviewsNeeded, actionToursNeeded } from "../redux/actions";
 import Spinner from "./Spinner";
 import TourItem from "./TourItem";
 
 const PageHome = (props) => {
+
+  const dispatch = useDispatch();
+
+  const routeFreshness = useSelector(state => state.routeFreshness);
+
+  useEffect(() => {
+    dispatch(actionToursNeeded());
+    dispatch(actionReviewsNeeded());
+  }, [routeFreshness]);
 
   const preset = {
     search: '',

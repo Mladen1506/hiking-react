@@ -226,8 +226,6 @@ var root = {
     const auth = await checkIsLoggedIn(token);
     if (auth.is_logged_in) {
       const user_id = auth.user_id;
-
-
       const results = await Tour.findOneAndUpdate({
         tour_id: args.tour_id,
         user_id: user_id
@@ -241,6 +239,27 @@ var root = {
         max_participants: args.max_participants
       });
 
+      console.log(results);
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  tourDelete: async (args, context) => {
+    console.log('tourDelete resolver');
+    console.log('args');
+    console.log(args);
+    const req = context;
+    const token = req.headers[config.TOKEN_HEADER_KEY];
+    console.log(token);
+    const auth = await checkIsLoggedIn(token);
+    if (auth.is_logged_in) {
+      const user_id = auth.user_id;
+      const results = await Tour.findOneAndDelete({
+        _id: args.tour_id,
+        user_id: user_id
+      });
       console.log(results);
       return true;
     } else {

@@ -1,38 +1,47 @@
 
 import { Button } from "@mui/material";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { actionRouteSet, actionRouteWithParamsSet } from "../redux/actions";
+import { actionRouteSet, actionRouteWithParamsSet, actionTourDelete, actionToursNeeded } from "../redux/actions";
 import Spinner from "./Spinner";
 import TourItem from "./TourItem";
 
 const PageMyTours = (props) => {
 
   const dispatch = useDispatch();
-
   const tours = useSelector(state => state.tours);
+  const routeFreshness = useSelector(state => state.routeFreshness);
+  const myUserId = useSelector(state => state.myUserId);
+
+  useEffect(() => {
+    dispatch(actionToursNeeded());
+  }, [routeFreshness]);
 
   const handleClickAddTour = (e) => {
     dispatch(actionRouteSet('ADD_TOUR'));
   };
 
   const _handleClickEditTour = (tour_id) => {
-    /*
-    dispatch({
-      type: 'ROUTE_WITH_PARAMS_SET',
-      payload: {
-        route: 'EDIT_TOUR',
-        params: {
-          tour_id: tour_id
-        }
-      }
-      */
       dispatch(actionRouteWithParamsSet('EDIT_TOUR', {
         tour_id: tour_id
       }))
   };
 
-  const myTours = tours.data;
+  const _handleClickDeleteTour = (tour_id) => {
+      if(window.confirm('Are you sure you want to delete this tour?')) {
+        console.log('deleting tour_id:', tour_id);
+        dispatch(actionTourDelete(tour_id));
+      }
+  };
+
+  // const myTours = tours.data;
+  const myTours = tours.data.filter((tour) => {
+    if(tour.user_id === myUserId){
+      return true;
+    }
+    return false;
+  });
 
   let jsxSpinner = null;
   if (tours.fetching) {
@@ -59,6 +68,7 @@ const PageMyTours = (props) => {
               type="button"
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={(e) => { _handleClickDeleteTour(tour_id) }}
             >Delete</Button>
           </td>
         </tr>
