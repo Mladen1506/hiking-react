@@ -8,20 +8,36 @@ import { calculateAverageRating, getSingleTourById } from "../utils/tour-utils";
 import FormReview from "./FormReview";
 import ReviewItem from "./ReviewItem";
 
+const checkIfJoined = (isLoggedIn, myUserId, participants) => {
+
+  let joined = false;
+
+  if (isLoggedIn) {
+    participants.forEach((item) => {
+      if (item.user_id === myUserId) {
+        joined = true;
+      }
+    })
+  } else {
+
+  }
+  return joined;
+};
+
 const PageSingleTour = (props) => {
 
   const dispatch = useDispatch();
-
   const tours = useSelector((state) => state.tours);
   const routeParams = useSelector((state) => state.routeParams);
   const tour_id = routeParams.tour_id;
   const reviews = useSelector(state => state.reviews);
-
   const routeFreshness = useSelector(state => state.routeFreshness);
-
+  
   const [participants, setParticipants] = useState([]);
-
   const numberOfParticipants = participants.length;
+  const isLoggedIn = useSelector(state => state.isLoggedIn);
+  const myUserId = useSelector(state => state.myUserId);
+  const joined = checkIfJoined(isLoggedIn, myUserId, participants);
 
   useEffect(() => {
     dispatch(actionReviewsNeeded());
@@ -57,6 +73,11 @@ const PageSingleTour = (props) => {
       })
   };
 
+  const handleClickLeave = (e) => {
+    console.log('click leave');
+    
+  };
+
   let averageRating = calculateAverageRating(reviews.data, tour_id);
 
   const filteredReviews = reviews.data.filter((review) => {
@@ -71,6 +92,30 @@ const PageSingleTour = (props) => {
       <ReviewItem review={review} />
     );
   });
+
+  let jsxBtnJoinLeave = null;
+  if (joined) {
+    jsxBtnJoinLeave = (
+      <Button
+        type="button"
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        // onClick={handleClickEditTour}
+        onClick={handleClickLeave}
+      >Leave</Button>
+    );
+
+  } else {
+    jsxBtnJoinLeave = (
+      <Button
+        type="button"
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        // onClick={handleClickEditTour}
+        onClick={handleClickJoin}
+      >Join</Button>
+    );
+  }
 
   return (
     <div>
@@ -89,13 +134,7 @@ const PageSingleTour = (props) => {
         readOnly
       />
       <br />
-      <Button
-        type="button"
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-        // onClick={handleClickEditTour}
-        onClick={handleClickJoin}
-      >Join</Button>
+      {jsxBtnJoinLeave}
       <Button
         type="button"
         variant="contained"
