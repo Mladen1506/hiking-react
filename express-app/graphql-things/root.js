@@ -5,6 +5,7 @@ const User = require('../models/user-model');
 const AuthSession = require('../models/auth-session-model');
 const Tour = require('../models/tour-model');
 const Review = require('../models/review-model');
+const Participation = require('../models/participation-model');
 
 
 // HELPERS
@@ -227,7 +228,7 @@ var root = {
     if (auth.is_logged_in) {
       const user_id = auth.user_id;
       const results = await Tour.findOneAndUpdate({
-        tour_id: args.tour_id,
+        _id: args.tour_id,
         user_id: user_id
       }, {
         // user_id: user_id,
@@ -272,6 +273,44 @@ var root = {
     const results = await Tour.find({});
     return results;
   },
+
+  tourJoin: async (args, context) => {
+    console.log('tourJoin resolver');
+    console.log('args');
+    console.log(args);
+    const req = context;
+    const token = req.headers[config.TOKEN_HEADER_KEY];
+    console.log(token);
+    const auth = await checkIsLoggedIn(token);
+    if (auth.is_logged_in) {
+      const user_id = auth.user_id;
+
+      // sad u bazi upisujemo joinovanje ture
+      
+      const results = Participation.create({
+        user_id: user_id,
+        tour_id: args.tour_id
+      });
+
+      console.log(results);
+      return true;
+
+    } else {
+      return false;
+    }
+  },
+
+  tourParticipantsGet: async (args, context) => {
+    console.log('tourParticipantsGet resolver');
+    console.log('args');
+    console.log(args);
+    const results = await Participation.find({
+      tour_id: args.tour_id
+    });
+    return results;
+  },
+
+
 
   reviewCreate: async (args, context) => {
     console.log('reviewCreate resolver');

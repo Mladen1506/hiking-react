@@ -174,6 +174,34 @@ ajax.tourGetAll = async () => {
   return response;
 };
 
+ajax.tourJoin = async (tour_id) => {
+  // GRAPHQL
+  const graphql_query = {
+    query: '{ tourJoin( tour_id: "' + tour_id + '" ) }'
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE..
+  const response = await axios.post(urlLib.apiGraphQL(), data_prepared, {
+    headers: ajax.preparedHeadersForAxios
+  });
+  console.log('axios response za tourJoin stigao', response);
+  return response;
+};
+
+ajax.tourParticipantsGet = async (tour_id) => {
+  // GRAPHQL
+  const graphql_query = {
+    query: '{ tourParticipantsGet( tour_id: "' + tour_id + '" ) { user_id } }'
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE..
+  const response = await axios.post(urlLib.apiGraphQL(), data_prepared, {
+    headers: ajax.preparedHeadersForAxios
+  });
+  console.log('axios response za tourParticipantsGet stigao', response);
+  return response;
+};
+
+
+
 ajax.reviewCreate = async (formData) => {
   // GRAPHQL
   const graphql_query = {

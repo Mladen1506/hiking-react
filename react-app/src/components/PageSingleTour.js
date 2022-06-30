@@ -1,10 +1,12 @@
-import { Rating, Typography } from "@mui/material";
+import { Button, Rating, Typography } from "@mui/material";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actionReviewsNeeded } from "../redux/actions";
+import { ajax } from "../utils/ajax-adapter";
 import { calculateAverageRating, getSingleTourById } from "../utils/tour-utils";
 import FormReview from "./FormReview";
+import ReviewItem from "./ReviewItem";
 
 const PageSingleTour = (props) => {
 
@@ -17,10 +19,23 @@ const PageSingleTour = (props) => {
 
   const routeFreshness = useSelector(state => state.routeFreshness);
 
+  const [participants, setParticipants] = useState([]);
+
+  const numberOfParticipants = participants.length;
+
   useEffect(() => {
     dispatch(actionReviewsNeeded());
+    // refresh participants
+    ajax.tourParticipantsGet(tour_id)
+      .then((response) => {
+        console.log('response za participante se vratio');
+        console.log(response);
+        if (response && response.data && response.data.data && Array.isArray(response.data.data.tourParticipantsGet)) {
+          setParticipants(response.data.data.tourParticipantsGet);
+        }
+      })
   }, [routeFreshness]);
-  
+
 
   const [tour, setTour] = useState({});
 
@@ -31,27 +46,30 @@ const PageSingleTour = (props) => {
 
   }, [tour_id, tours]);
 
+  const handleClickJoin = (e) => {
+    console.log('click join');
+    ajax.tourJoin(tour_id)
+      .then((response) => {
+        // ovde pozivamo refresh na osnovu kojeg cemo dobiti svjezije participante
+        dispatch({
+          type: 'REFRESH'
+        })
+      })
+  };
+
   let averageRating = calculateAverageRating(reviews.data, tour_id);
 
   const filteredReviews = reviews.data.filter((review) => {
-    if (review.tour_id === tour_id){
+    if (review.tour_id === tour_id) {
       return true;
-    } 
+    }
     return false;
   });
 
   let jsxReviews = filteredReviews.map((review) => {
-    return(
-      <div key={review._id}>
-        <Rating
-          name="average_rating"
-          value={review.rating}
-          readOnly
-        />
-        <div>{review.rating}</div>
-        <div>{review.text}</div>
-      </div>
-    )
+    return (
+      <ReviewItem review={review} />
+    );
   });
 
   return (
@@ -62,13 +80,28 @@ const PageSingleTour = (props) => {
       <div>Difficulty: {tour.difficulty}</div>
       <div>Trail Length:{tour.trail_length}</div>
       <div>Maximum Participants:{tour.max_participants}</div>
-      {/* <div>Average Rating: {averageRating}</div> */}
+      <div>Participants: {numberOfParticipants}</div>
+      <div>Average Rating: {averageRating}</div>
       <Typography component="legend">Average Rating</Typography>
       <Rating
         name="average_rating"
         value={averageRating}
         readOnly
       />
+      <br />
+      <Button
+        type="button"
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        // onClick={handleClickEditTour}
+        onClick={handleClickJoin}
+      >Join</Button>
+      <Button
+        type="button"
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        onClick={(e) => { }}
+      >Like</Button>
       <h3>Reviews:</h3>
       {jsxReviews}
       <FormReview tour_id={tour_id} />
