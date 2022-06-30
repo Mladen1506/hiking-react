@@ -20,6 +20,12 @@ type Tour {
   max_participants: Int
 }
 
+type Participant {
+  _id: String
+  user_id: String
+  tour_id: String
+}
+
 type Review {
   _id: String
   user_id: String
@@ -41,6 +47,8 @@ type Review {
     tourUpdate(name: String, description: String, date: String, difficulty: String, trail_length: Int, max_participants: Int tour_id: String): Boolean
     tourDelete(tour_id: String): Boolean
     tourGetAll: [Tour]
+    tourJoin(tour_id: String): Boolean
+    tourParticipantsGet(tour_id: String): [Participant]
     reviewCreate(rating: Int, text: String, tour_id: String): Boolean
     reviewGetAll: [Review]
   }
