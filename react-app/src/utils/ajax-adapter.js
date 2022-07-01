@@ -187,6 +187,45 @@ ajax.tourJoin = async (tour_id) => {
   return response;
 };
 
+ajax.tourLeave = async (tour_id) => {
+  // slanje requeta za participate in tour
+  // GRAPHQL
+  const graphql_query = {
+    query: '{ tourLeave( tour_id: "' + tour_id + '" ) }'
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE to json..
+  const response = await axios.post(urlLib.apiGraphQL(), data_prepared, {
+    headers: ajax.preparedHeadersForAxios
+  });
+  console.log('axios response za tourLeave stigao:', response);
+  return response;
+};
+ajax.tourLike = async (tour_id) => {
+  // GRAPHQL
+  const graphql_query = {
+    query: '{ tourLike( tour_id: "' + tour_id + '" ) }'
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE..
+  const response = await axios.post(urlLib.apiGraphQL(), data_prepared, {
+    headers: ajax.preparedHeadersForAxios
+  });
+  console.log('axios response za tourLike stigao', response);
+  return response;
+};
+
+ajax.tourUnlike = async (tour_id) => {
+  // GRAPHQL
+  const graphql_query = {
+    query: '{ tourUnlike( tour_id: "' + tour_id + '" ) }'
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE to json..
+  const response = await axios.post(urlLib.apiGraphQL(), data_prepared, {
+    headers: ajax.preparedHeadersForAxios
+  });
+  console.log('axios response za tourUnlike stigao:', response);
+  return response;
+};
+
 ajax.tourParticipantsGet = async (tour_id) => {
   // GRAPHQL
   const graphql_query = {
@@ -241,4 +280,3 @@ ajax.sacuvaj_token_lokalno_i_trajno = (token) => {
   // ako je u pitanju android react app
   // androidStorage('hiking_token', token)
 }
-

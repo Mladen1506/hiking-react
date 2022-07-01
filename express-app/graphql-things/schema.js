@@ -8,7 +8,6 @@ type User {
   is_success: Boolean
   username: String
 }
-
 type Tour {
   _id: String
   user_id: String
@@ -19,13 +18,11 @@ type Tour {
   trail_length: Int 
   max_participants: Int
 }
-
 type Participant {
   _id: String
   user_id: String
   tour_id: String
 }
-
 type Review {
   _id: String
   user_id: String
@@ -33,7 +30,6 @@ type Review {
   rating: Int 
   text: String 
 }
-
   type Query {
     hello: String
     random: Float!
@@ -48,6 +44,9 @@ type Review {
     tourDelete(tour_id: String): Boolean
     tourGetAll: [Tour]
     tourJoin(tour_id: String): Boolean
+    tourLeave(tour_id: String): Boolean
+    tourLike(tour_id: String): Boolean
+    tourUnlike(tour_id: String): Boolean
     tourParticipantsGet(tour_id: String): [Participant]
     reviewCreate(rating: Int, text: String, tour_id: String): Boolean
     reviewGetAll: [Review]

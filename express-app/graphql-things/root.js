@@ -1,3 +1,5 @@
+
+
 const jwt = require('jsonwebtoken');
 const config = require('../utils/config');
 const Glupost = require('../models/glupost-model');
@@ -6,6 +8,7 @@ const AuthSession = require('../models/auth-session-model');
 const Tour = require('../models/tour-model');
 const Review = require('../models/review-model');
 const Participation = require('../models/participation-model');
+const TourLike = require('../models/tour-like-model');
 
 
 // HELPERS
@@ -260,6 +263,12 @@ var root = {
       const results = await Tour.findOneAndDelete({
         _id: args.tour_id,
         user_id: user_id
+      }, function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Deleted docs: ", docs);
+        }
       });
       console.log(results);
       return true;
@@ -286,19 +295,116 @@ var root = {
       const user_id = auth.user_id;
 
       // sad u bazi upisujemo joinovanje ture
-      
-      const results = Participation.create({
+      await Participation.countDocuments({
         user_id: user_id,
-        tour_id: args.tour_id
+        tour_id: args.tour_id,
+      }, function (err, counted) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Conted docs: ", counted);
+          if (counted > 0) {
+            // ne upisujemo dupoliakte
+          } else {
+            const results = Participation.create({
+              user_id: user_id,
+              tour_id: args.tour_id,
+            });
+            console.log(results);
+          }
+        }
       });
-
       console.log(results);
       return true;
+    } else {
+      // ako nismo ulogvani necemo ni da kreiramo turu
+      return false;
+    }
+  },
 
+  tourLeave: async (args, context) => {
+    console.log('tourLeave resolver');
+    // If context is not provided, the request object is passed as the context.
+    console.log('args');
+    console.log(args);
+    const req = context;
+    const token = req.headers[config.TOKEN_HEADER_KEY];
+    console.log(token);
+    const auth = await checkIsLoggedIn(token);
+    if (auth.is_logged_in) {
+      // ulogovani smo, sad mozemo da kreiramo turu
+      const user_id = auth.user_id;
+      // sad u bazi brisemo participanta i tako radimo leave
+      const results = await Participation.findOneAndDelete({
+        tour_id: args.tour_id,
+        user_id: user_id
+      }, function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Deleted docs: ", docs);
+        }
+      });
+      // console.log(results);
+      return true;
+    } else {
+      // ako nismo ulogvani necemo ni da kreiramo turu
+      return false;
+    }
+  },
+
+  tourLike: async (args, context) => {
+    console.log('tourLike resolver');
+    console.log('args');
+    console.log(args);
+    const req = context;
+    const token = req.headers[config.TOKEN_HEADER_KEY];
+    console.log(token);
+    const auth = await checkIsLoggedIn(token);
+    if (auth.is_logged_in) {
+      const user_id = auth.user_id;
+      // sad u bazi upisujemo joinovanje ture
+      const results = TourLike.create({
+        user_id: user_id,
+        tour_id: args.tour_id,
+      });
+      console.log(results);
+      return true;
     } else {
       return false;
     }
   },
+
+  tourUnlike: async (args, context) => {
+    console.log('tourUnlike resolver');
+    // If context is not provided, the request object is passed as the context.
+    console.log('args');
+    console.log(args);
+    const req = context;
+    const token = req.headers[config.TOKEN_HEADER_KEY];
+    console.log(token);
+    const auth = await checkIsLoggedIn(token);
+    if (auth.is_logged_in) {
+      // ulogovani smo, sad mozemo da 
+      const user_id = auth.user_id;
+      // sad u bazi brisemo participanta i tako radimo leave
+      const results = TourLike.findOneAndDelete({
+        tour_id: args.tour_id,
+        user_id: user_id
+      }, function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Deleted docs: ", docs);
+        }
+      });
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+
 
   tourParticipantsGet: async (args, context) => {
     console.log('tourParticipantsGet resolver');
@@ -309,8 +415,6 @@ var root = {
     });
     return results;
   },
-
-
 
   reviewCreate: async (args, context) => {
     console.log('reviewCreate resolver');
@@ -368,4 +472,3 @@ var root = {
 };
 
 module.exports = root;
-
