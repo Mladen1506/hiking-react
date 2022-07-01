@@ -32,7 +32,7 @@ const PageSingleTour = (props) => {
   const tour_id = routeParams.tour_id;
   const reviews = useSelector(state => state.reviews);
   const routeFreshness = useSelector(state => state.routeFreshness);
-  
+
   const [participants, setParticipants] = useState([]);
   const numberOfParticipants = participants.length;
   const isLoggedIn = useSelector(state => state.isLoggedIn);
@@ -74,8 +74,38 @@ const PageSingleTour = (props) => {
   };
 
   const handleClickLeave = (e) => {
-    console.log('click leave');
-    
+    console.log('click leave...');
+    ajax.tourLeave(tour_id)
+      .then((response) => {
+        // ovde pozivamo refrresh na osnovu kojeg cem oda dobijemo svezije participante
+        dispatch({
+          type: 'REFRESH'
+        });
+      })
+
+  };
+
+  const handleClickLike = (e) => {
+    console.log('click like');
+    ajax.tourLike(tour_id)
+      .then((response) => {
+        // ovde pozivamo refresh na osnovu kojeg cemo dobiti svjezije participante
+        dispatch({
+          type: 'REFRESH'
+        })
+      })
+  };
+
+  const handleClickUnlike = (e) => {
+    console.log('click unlike...');
+    ajax.tourLeave(tour_id)
+      .then((response) => {
+        // ovde pozivamo refrresh na osnovu kojeg cem oda dobijemo svezije participante
+        dispatch({
+          type: 'REFRESH'
+        });
+      })
+
   };
 
   let averageRating = calculateAverageRating(reviews.data, tour_id);
@@ -117,6 +147,29 @@ const PageSingleTour = (props) => {
     );
   }
 
+  let jsxBtnLikeUnlike = null;
+
+  if (true) {
+    jsxBtnLikeUnlike = (
+      <Button
+        type="button"
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        onClick={handleClickLike}
+      >Like</Button>
+    );
+
+  } else {
+    jsxBtnLikeUnlike = (
+      <Button
+        type="button"
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        onClick={handleClickUnlike}
+      >Dislike</Button>
+    );
+  }
+
   return (
     <div>
       <h3>Tour Name: {tour.name}</h3>
@@ -135,12 +188,8 @@ const PageSingleTour = (props) => {
       />
       <br />
       {jsxBtnJoinLeave}
-      <Button
-        type="button"
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-        onClick={(e) => { }}
-      >Like</Button>
+      {jsxBtnLikeUnlike}
+
       <h3>Reviews:</h3>
       {jsxReviews}
       <FormReview tour_id={tour_id} />
