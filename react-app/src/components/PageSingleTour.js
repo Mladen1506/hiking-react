@@ -64,26 +64,18 @@ const PageSingleTour = (props) => {
     // refresh participants
     ajax.tourParticipantsGet(tour_id)
       .then((response) => {
-        console.log('response za participante se vratio');
         console.log(response);
-        if (response && response.data && response.data.data && Array.isArray(response.data.data.tourParticipantsGet)) {
-          setParticipants(response.data.data.tourParticipantsGet);
-        }
+          setParticipants(response);
       })
 
       // refresh likes
       ajax.tourLikeListGet(tour_id)
       .then((response) => {
-        if (response && response.data && response.data.data && Array.isArray(response.data.data.tourLikeListGet)) {
-          setLikeList(response.data.data.tourLikeListGet);
-        }
+          setLikeList(response);
       })
-
   }, [routeFreshness]);
 
-
   const [tour, setTour] = useState({});
-
 
   useEffect(() => {
     const tour = getSingleTourById(tour_id, tours.data);

@@ -4,6 +4,9 @@ import { Rating } from '@mui/material';
 import { calculateAverageRating } from "../utils/tour-utils";
 import { useDispatch } from "react-redux";
 import { actionRouteWithParamsSet } from "../redux/actions";
+import { useEffect, useState } from "react";
+import { ajax } from "../utils/ajax-adapter";
+
 const TourItem = (props) => {
 
   const dispatch = useDispatch();
@@ -21,10 +24,12 @@ const TourItem = (props) => {
   //   .then((response) => {
   //     console.log('response', response);
   //     if(response.data.data.userProfileGet.username) {
-  //       setUserName(response.data.data.userProfileGet.username);
+  //       setUserName(response.data.data.userProfileGet.user)
   //     }
   //   })
-  // }, [])
+  // })
+
+
 
   let averageRating = calculateAverageRating(reviews.data, tour_id);
 

@@ -1,4 +1,7 @@
 import { Rating } from "@mui/material";
+import { useEffect, useState } from "react";
+import { ajax } from "../utils/ajax-adapter";
+
 const ReviewItem = (props) => {
   const review = props.review;
 

@@ -295,7 +295,7 @@ var root = {
       const user_id = auth.user_id;
 
       // sad u bazi upisujemo joinovanje ture
-      await Participation.countDocuments({
+      Participation.countDocuments({
         user_id: user_id,
         tour_id: args.tour_id,
       }, function (err, counted) {
@@ -355,6 +355,7 @@ var root = {
 
   tourLike: async (args, context) => {
     console.log('tourLike resolver');
+    // If context is not provided, the request object is passed as the context.
     console.log('args');
     console.log(args);
     const req = context;
@@ -362,15 +363,32 @@ var root = {
     console.log(token);
     const auth = await checkIsLoggedIn(token);
     if (auth.is_logged_in) {
+      // ulogovani smo, sad mozemo da
       const user_id = auth.user_id;
-      // sad u bazi upisujemo joinovanje ture
-      const results = TourLike.create({
+      // NE DOZVOLJAVAMO UPIS AKO JE KORISNIK VEC LAJKOVAO
+      await TourLike.countDocuments({
         user_id: user_id,
         tour_id: args.tour_id,
+      }, function (err, counted) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Conted docs: ", counted);
+          if (counted > 0) {
+            // ne upisujemo dupoliakte
+          } else {
+            // sad u bazi upisujumo like
+            const results = TourLike.create({
+              user_id: user_id,
+              tour_id: args.tour_id,
+            });
+            console.log(results);
+          }
+        }
       });
-      console.log(results);
       return true;
     } else {
+      // ako nismo ulogvani necemo ni da odradimo
       return false;
     }
   },
@@ -385,10 +403,10 @@ var root = {
     console.log(token);
     const auth = await checkIsLoggedIn(token);
     if (auth.is_logged_in) {
-      // ulogovani smo, sad mozemo da 
+      // ulogovani smo, sad mozemo da
       const user_id = auth.user_id;
       // sad u bazi brisemo participanta i tako radimo leave
-      const results = TourLike.findOneAndDelete({
+      const results = await TourLike.findOneAndDelete({
         tour_id: args.tour_id,
         user_id: user_id
       }, function (err, docs) {
@@ -398,12 +416,13 @@ var root = {
           console.log("Deleted docs: ", docs);
         }
       });
+      // console.log(results);
       return true;
     } else {
+      // ako nismo ulogvani necemo ni da odradimo
       return false;
     }
   },
-
 
 
   tourParticipantsGet: async (args, context) => {
@@ -426,8 +445,47 @@ var root = {
     return results;
   },
 
+  // reviewCreate: async (args, context) => {
+  //   console.log('reviewCreate resolver');
+  //   console.log('args');
+  //   console.log(args);
+  //   const req = context;
+  //   const token = req.headers[config.TOKEN_HEADER_KEY];
+  //   console.log(token);
+  //   const auth = await checkIsLoggedIn(token);
+  //   if (auth.is_logged_in) {
+  //     const user_id = auth.user_id;
+
+  //     await TourLike.countDocuments({
+  //       user_id: user_id,
+  //       tour_id: args.tour_id,
+  //     }, function (err, counted) {
+  //       if (err) {
+  //         console.log(err);
+  //       } else {
+  //         console.log("Counted docs: ", counted);
+  //         if (counted > 0) {
+  //           // ne upisujemo duplikate
+  //         } else {
+  //           // sad u bazi kreiramo ture
+  //           const results = Review.create({
+  //             user_id: user_id,
+  //             tour_id: args.tour_id,
+  //             rating: args.rating,
+  //             text: args.text
+  //           });
+  //           console.log(results);
+  //         }
+  //       }
+  //     });
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // },
   reviewCreate: async (args, context) => {
     console.log('reviewCreate resolver');
+    // If context is not provided, the request object is passed as the context.
     console.log('args');
     console.log(args);
     const req = context;
@@ -435,17 +493,33 @@ var root = {
     console.log(token);
     const auth = await checkIsLoggedIn(token);
     if (auth.is_logged_in) {
+      // ulogovani smo, sad mozemo da kreiramo turu
       const user_id = auth.user_id;
-      const results = await Review.create({
+      // NE DOZVOLJAVAMO UPIS AKO JE KORISNIK VEC NAPRAVIO REVIEW ZA ISTU TURU
+      const counted = await Review.countDocuments({
         user_id: user_id,
         tour_id: args.tour_id,
-        rating: args.rating,
-        text: args.text
-      });
-      console.log(results);
-      return true;
+      }).exec();
+      console.log('after exec');
 
+      console.log("Counted docs: ", counted);
+      if (counted > 0) {
+        // ne upisujemo dupoliakte
+        console.log('*** preskacemo jer vec ima raview tog korsnika za tu turu');
+      } else {
+        // sad u bazi kreiramo turu
+        console.log('*** kreiramo jer je counted 0');
+        const results = await Review.create({
+          user_id: user_id,
+          tour_id: args.tour_id,
+          rating: args.rating,
+          text: args.text
+        });
+        console.log(results);
+      };
+      return true;
     } else {
+      // ako nismo ulogvani necemo ni da kreiramo turu
       return false;
     }
   },
