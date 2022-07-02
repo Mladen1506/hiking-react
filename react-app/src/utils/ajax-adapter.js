@@ -239,6 +239,19 @@ ajax.tourParticipantsGet = async (tour_id) => {
   return response;
 };
 
+ajax.tourLikeListGet = async (tour_id) => {
+  // GRAPHQL
+  const graphql_query = {
+    query: '{ tourLikeListGet( tour_id: "' + tour_id + '" ) { user_id } }'
+  };
+  const data_prepared = convert_to_json(graphql_query); // ENCODE..
+  const response = await axios.post(urlLib.apiGraphQL(), data_prepared, {
+    headers: ajax.preparedHeadersForAxios
+  });
+  console.log('axios response za tourLikeListGet stigao', response);
+  return response;
+};
+
 
 
 ajax.reviewCreate = async (formData) => {

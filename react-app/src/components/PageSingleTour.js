@@ -24,6 +24,22 @@ const checkIfJoined = (isLoggedIn, myUserId, participants) => {
   return joined;
 };
 
+const checkIfLiked = (isLoggedIn, myUserId, likeList) => {
+
+  let if_liked = false;
+
+  if (isLoggedIn) {
+    likeList.forEach((item) => {
+      if (item.user_id === myUserId) {
+        if_liked = true;
+      }
+    })
+  } else {
+
+  }
+  return if_liked;
+};
+
 const PageSingleTour = (props) => {
 
   const dispatch = useDispatch();
@@ -35,9 +51,13 @@ const PageSingleTour = (props) => {
 
   const [participants, setParticipants] = useState([]);
   const numberOfParticipants = participants.length;
+  const [likeList, setLikeList] = useState([]);
+  const numberOfLikes = likeList.length;
   const isLoggedIn = useSelector(state => state.isLoggedIn);
   const myUserId = useSelector(state => state.myUserId);
   const joined = checkIfJoined(isLoggedIn, myUserId, participants);
+  const if_liked = checkIfLiked(isLoggedIn, myUserId, likeList);
+
 
   useEffect(() => {
     dispatch(actionReviewsNeeded());
@@ -50,6 +70,15 @@ const PageSingleTour = (props) => {
           setParticipants(response.data.data.tourParticipantsGet);
         }
       })
+
+      // refresh likes
+      ajax.tourLikeListGet(tour_id)
+      .then((response) => {
+        if (response && response.data && response.data.data && Array.isArray(response.data.data.tourLikeListGet)) {
+          setLikeList(response.data.data.tourLikeListGet);
+        }
+      })
+
   }, [routeFreshness]);
 
 
@@ -98,7 +127,7 @@ const PageSingleTour = (props) => {
 
   const handleClickUnlike = (e) => {
     console.log('click unlike...');
-    ajax.tourLeave(tour_id)
+    ajax.tourUnlike(tour_id)
       .then((response) => {
         // ovde pozivamo refrresh na osnovu kojeg cem oda dobijemo svezije participante
         dispatch({
@@ -149,17 +178,7 @@ const PageSingleTour = (props) => {
 
   let jsxBtnLikeUnlike = null;
 
-  if (true) {
-    jsxBtnLikeUnlike = (
-      <Button
-        type="button"
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-        onClick={handleClickLike}
-      >Like</Button>
-    );
-
-  } else {
+  if (if_liked) {
     jsxBtnLikeUnlike = (
       <Button
         type="button"
@@ -167,6 +186,16 @@ const PageSingleTour = (props) => {
         sx={{ mt: 3, mb: 2 }}
         onClick={handleClickUnlike}
       >Dislike</Button>
+      );
+      
+    } else {
+    jsxBtnLikeUnlike = (
+      <Button
+        type="button"
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        onClick={handleClickLike}
+      >Like</Button>
     );
   }
 
@@ -179,6 +208,7 @@ const PageSingleTour = (props) => {
       <div>Trail Length:{tour.trail_length}</div>
       <div>Maximum Participants:{tour.max_participants}</div>
       <div>Participants: {numberOfParticipants}</div>
+      <div>Likes: {numberOfLikes}</div>
       <div>Average Rating: {averageRating}</div>
       <Typography component="legend">Average Rating</Typography>
       <Rating

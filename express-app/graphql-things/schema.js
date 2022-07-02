@@ -23,6 +23,11 @@ type Participant {
   user_id: String
   tour_id: String
 }
+type TourLike {
+  _id: String
+  user_id: String
+  tour_id: String
+}
 type Review {
   _id: String
   user_id: String
@@ -45,9 +50,10 @@ type Review {
     tourGetAll: [Tour]
     tourJoin(tour_id: String): Boolean
     tourLeave(tour_id: String): Boolean
+    tourParticipantsGet(tour_id: String): [Participant]
     tourLike(tour_id: String): Boolean
     tourUnlike(tour_id: String): Boolean
-    tourParticipantsGet(tour_id: String): [Participant]
+    tourLikeListGet(tour_id: String): [TourLike]
     reviewCreate(rating: Int, text: String, tour_id: String): Boolean
     reviewGetAll: [Review]
   }
