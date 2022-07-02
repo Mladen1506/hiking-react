@@ -23,4 +23,4 @@ This project is licensed under MIT
 
 ## Authors
 
-* [Mladen Makivic] (https://github.com/Mladen1506)
+* Mladen Makivic [GitHub](https://github.com/Mladen1506)
