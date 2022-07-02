@@ -416,6 +416,16 @@ var root = {
     return results;
   },
 
+  tourLikeListGet: async (args, context) => {
+    console.log('tourParticipantsGet resolver');
+    console.log('args');
+    console.log(args);
+    const results = await TourLike.find({
+      tour_id: args.tour_id
+    });
+    return results;
+  },
+
   reviewCreate: async (args, context) => {
     console.log('reviewCreate resolver');
     console.log('args');
