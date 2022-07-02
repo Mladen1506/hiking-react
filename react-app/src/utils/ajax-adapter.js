@@ -236,7 +236,10 @@ ajax.tourParticipantsGet = async (tour_id) => {
     headers: ajax.preparedHeadersForAxios
   });
   console.log('axios response za tourParticipantsGet stigao', response);
-  return response;
+  if (response && response.data && response.data.data && Array.isArray(response.data.data.tourParticipantsGet)) {
+    return response.data.data.tourParticipantsGet;
+  }
+  return [];
 };
 
 ajax.tourLikeListGet = async (tour_id) => {
@@ -249,7 +252,10 @@ ajax.tourLikeListGet = async (tour_id) => {
     headers: ajax.preparedHeadersForAxios
   });
   console.log('axios response za tourLikeListGet stigao', response);
-  return response;
+  if (response && response.data && response.data.data && Array.isArray(response.data.data.tourLikeListGet)) {
+    return response.data.data.tourLikeListGet;
+  }
+  return [];
 };
 
 
