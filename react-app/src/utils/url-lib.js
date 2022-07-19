@@ -16,7 +16,7 @@ urlLib.websitePrefix = () => {
   return url;
 };
 
-apiLib.apiPrefix = () => {
+urlLib.apiPrefix = () => {
   // API PREFIX UKLJUCUJE CEO POCETAK URL-a (i podomen i domen) NA KOJEM SE HOSTUJE API
   // let url = 'api.sajtzaapi.com'; // TODO...
   let url = config.apiUrlPrefix;
@@ -24,7 +24,7 @@ apiLib.apiPrefix = () => {
 };
 
 urlLib.apiGraphQL = () => {
-  return urlLib.urlPrefix() + '/api/v2/graphql';
+  return urlLib.apiPrefix() + '/api/v2/graphql';
 };
 
 
