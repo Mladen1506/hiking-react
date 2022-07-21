@@ -7,7 +7,7 @@ Users can do CRUD functions with his own Hike. Other Users can view other users 
 
 ## Deployment
 
-You can see a deployed version [here]
+You can see a deployed version [here](https://mladen-hiking-app.herokuapp.com/)
 
 ## Built With
 
